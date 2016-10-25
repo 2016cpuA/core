@@ -50,7 +50,7 @@ module top #(
 	logic [4:0] sa;
 	logic alu_valid;
 	alu alu_instance(CLK, funct, alu_enable, rs, rt, sa, rd, alu_valid);
-	
+
 	localparam OP_SP   = 6'b000000;
 	localparam OP_JP   = 6'b000010;
 	localparam OP_JAL  = 6'b000011;
@@ -81,6 +81,14 @@ module top #(
 			led[1] <= 1;
 			loader_enable <= 0;
 		end else if (loader_enable) begin
+//			loader_data[0] <= receiver_data[7];
+//			loader_data[1] <= receiver_data[6];
+//			loader_data[2] <= receiver_data[5];
+//			loader_data[3] <= receiver_data[4];
+//			loader_data[4] <= receiver_data[3];
+//			loader_data[5] <= receiver_data[2];
+//			loader_data[6] <= receiver_data[1];
+//			loader_data[7] <= receiver_data[0];
 			loader_data <= receiver_data;
 			loader_ready <= receiver_valid;
 		end
