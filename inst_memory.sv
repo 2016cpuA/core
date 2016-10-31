@@ -2,6 +2,7 @@ module inst_memory #(
 	parameter INST_MEM_WIDTH = 2
 ) (
 	input logic CLK,
+	input logic reset,
 	input logic [INST_MEM_WIDTH-1:0] pc,
 	input logic [7:0] loader_data,
 	input logic loader_enable,
@@ -15,9 +16,9 @@ module inst_memory #(
 		3 : 32'hf0000000
 	};
 	logic [31:0] loader_buf;
-	logic [INST_MEM_WIDTH-1:0] loader_index = 0;
-	integer state = 0;
-	logic [7:0] order_change;
+	logic [INST_MEM_WIDTH-1:0] loader_index;
+	integer state;
+//	logic [7:0] order_change;
 	
 //	assign order_change[0] = loader_data[7];
 //	assign order_change[1] = loader_data[6];
@@ -28,32 +29,38 @@ module inst_memory #(
 //	assign order_change[6] = loader_data[1];
 //	assign order_change[7] = loader_data[0];
 
-	assign order_change = loader_data;
+//	assign order_change = loader_data;
 
 	always @(posedge CLK) begin
-	   	inst = inst_mem[pc];
+		if (reset) begin
+			loader_index <= 0;
+			state <= 0;
+			inst_enable <= 1;
+		end
+	   	inst <= inst_mem[pc];
+		
 		if (state == 0) begin
 			if (loader_enable) begin
 				state <= state + 1;
 			end
 		end else if (state == 1) begin
 			if (loader_ready) begin
-				loader_buf[7:0] <= order_change;
+				loader_buf[7:0] <= loader_change;
 				state <= state + 1;
 			end
 		end else if (state == 2) begin
 			if (loader_ready) begin
-				loader_buf[15:8] <= order_change;
+				loader_buf[15:8] <= loader_change;
 				state <= state + 1;
 			end
 		end else if (state == 3) begin
 			if (loader_ready) begin
-				loader_buf[23:16] <= order_change;
+				loader_buf[23:16] <= loader_change;
 				state <= state + 1;
 			end
 		end else if (state == 4) begin
 			if (loader_ready) begin
-				loader_buf[31:24] <= order_change;
+				loader_buf[31:24] <= loader_change;
 				state <= state + 1;
 			end
 		end else if (state == 5) begin

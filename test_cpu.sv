@@ -506,7 +506,6 @@ module test_top #(
 	logic [5:0] before_op = 0;
 
 	always @(posedge CLK) begin
-		led[0] <= 1;
 		if (sw_n_10) begin
 			loader_enable <= 1;
 		end else if (sw_s_8) begin
@@ -519,7 +518,7 @@ module test_top #(
 		if ((state == 0) && !loader_enable && (before_op != inst[31:26])) begin
 			case (inst[31:26])
 				OP_SP : begin
-							
+						;
 						end
 				OP_JP : begin
 							pc <= inst[INST_MEM_WIDTH-1:0];
