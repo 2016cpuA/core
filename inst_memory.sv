@@ -35,7 +35,6 @@ module inst_memory #(
 		if (reset) begin
 			loader_index <= 0;
 			state <= 0;
-			inst_enable <= 1;
 		end
 	   	inst <= inst_mem[pc];
 		

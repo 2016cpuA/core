@@ -25,6 +25,7 @@ module inst_fetch #(
 			pc_next <= 0;
 			pc1_next <= 0;
 			inst_enable <= 1;
+			loader_enable <= 0;
 		end else begin
 			pc_next <= pc;
 			pc1_next <= pc1;

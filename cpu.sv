@@ -16,7 +16,7 @@ module top #(  // todo : reset system
 );
 	//reset
 	logic reset;
-	assign reset = sw_c_7 | inst_enable_from_if;
+	assign reset = sw_c_7;
 
 	//clk generate
 	logic CLK;
@@ -221,9 +221,11 @@ module top #(  // todo : reset system
 		end
 
 	//inst_decode
-	inst_to_id <= inst_from_if;
-	pc_to_id <= pc_next_from_if;
-	pc1_to_id <= pc1_next_from_if;
+	if (inst_enable_from_if) begin
+		inst_to_id <= inst_from_if;
+		pc_to_id <= pc_next_from_if;
+		pc1_to_id <= pc1_next_from_if;
+	end
 	RegWrite_before_to_id <= RegWrite_next_from_wb;
 	UART_write_enable_to_id <= UART_write_enable_from_wb;
 	data_to_id <= data_from_wb;
