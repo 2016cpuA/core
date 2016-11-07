@@ -71,6 +71,10 @@ module inst_memory #(
 				state <= 0;
 				loader_index <= 0;
 			end
+		end	
+		if (!loader_enable) begin
+				state <= 0;
+				loader_index <= 0;
 		end
 	end
 endmodule

@@ -1,5 +1,5 @@
 module inst_decode #(
-	parameter INST_MEM_WIDTH = 2;
+	parameter INST_MEM_WIDTH = 2
 ) (
 	input logic reset,
 	input logic [31:0] inst,
@@ -33,9 +33,43 @@ module inst_decode #(
 	logic [5:0] opcode;
 	logic [4:0] rs;
 
-	inst_decoder inst_decoder_instance(inst, opcpde, rs, rt, rd, sa, immediate, inst_index);
-	register register_instance(RegWrite_before, UART_write_enable, rs, rt, address, data, op1, op2);
-	operator operator_instamce(opcode, funct, reset, RegWrite, MemtoReg, ALUSrcs, ALUSrcs2, ALUOp, RegDist, Branch, MemWrite, MemRead, UARTtoReg, RegtoUART
+	inst_decoder inst_decoder_instance(
+			inst, 
+			opcode, 
+			rs, 
+			rt, 
+			rd, 
+			sa, 
+			immediate, 
+			inst_index
+	);
+	register register_instance(
+			RegWrite_before, 
+			UART_write_enable, 
+			rs, 
+			rt, 
+			address, 
+			data, 
+			reset,
+			op1, 
+			op2
+	);
+	operator operator_instamce(
+			opcode, 
+			funct, 
+			reset, 
+			RegWrite, 
+			MemtoReg, 
+			ALUSrcs, 
+			ALUSrcs2, 
+			ALUOp, 
+			RegDist, 
+			Branch, 
+			MemWrite, 
+			MemRead, 
+			UARTtoReg, 
+			RegtoUART
+	);
 	always_comb begin
 		pc_next <= pc;
 		pc1_next <= px1;

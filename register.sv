@@ -1,4 +1,4 @@
-module redister #(
+module register #(
 	parameter REG_NUM = 32
 ) (
 	input logic RegWrite,
@@ -8,8 +8,8 @@ module redister #(
 	input logic [4:0] rw,
 	input logic [31:0] write_data,
 	input logic reset,
-	output logic [4:0] op1,
-	output logic [4:0] op2
+	output logic [31:0] op1_sub,
+	output logic [31:0] op2_sub
 );
 	logic [REG_NUM-1:0] [31:0] r;
 

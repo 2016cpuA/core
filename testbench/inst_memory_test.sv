@@ -61,6 +61,28 @@ module inst_memory_test #(
 		loader_ready <= 0;
 		#WAIT;
 		#WAIT;
+		loader_data <= 8'b11111111;
+		loader_ready <= 1;
+	    #CLK_;	
+		loader_ready <= 0;
+		#WAIT;
+		loader_data <= 8'b11111111;
+		loader_ready <= 1;
+	    #CLK_;	
+		loader_ready <= 0;
+		#WAIT;
+		loader_data <= 8'b00000000;
+		loader_ready <= 1;
+	    #CLK_;	
+		loader_ready <= 0;
+		#WAIT;
+		loader_data <= 8'b00000000;
+		loader_ready <= 1;
+	    #CLK_;	
+		loader_ready <= 0;
+		#WAIT;
+		#WAIT;
+		loader_enable <= 0;
 	end
 endmodule
 	
