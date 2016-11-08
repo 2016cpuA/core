@@ -49,7 +49,7 @@ module sender_buffer #(
 			valid <= 1;
 			state2 <= state2 + 1;
 		end else if (state2 == 1 && sender_ready) begin
-			output_data <= buffer[head[23:16];
+			output_data <= buffer[head][23:16];
 			state2 <= state2 + 1;
 		end else if (state2 == 2 && sender_ready) begin
 			output_data <= buffer[head][15:8];
@@ -62,4 +62,5 @@ module sender_buffer #(
 			valid <= 0;
 			head <= head + 1;
 		end
+	end
 endmodule

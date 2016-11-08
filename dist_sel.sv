@@ -3,7 +3,7 @@ module dist_sel(
 	input [4:0] rd,
 	input [4:0] rt,
 	output [4:0] rdist
-)
+);
 	always_comb begin
 		case (RegDist)
 			1'b00 : rdist <= rd;

@@ -13,7 +13,7 @@ module inst_decoder(
 		opcode <= inst[31:26];
 		rs <= inst[25:21];
 		rt <= inst[20:16];
-		rd <- inst[15:11];
+		rd <= inst[15:11];
 		sa <= inst[10:6];
 		funct <= inst[5:0];
 		immediate <= inst[15:0];

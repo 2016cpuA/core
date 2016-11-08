@@ -60,29 +60,29 @@ module operator(
 		case (opcpde)
 			OP_SP : begin
 						case (funct)
-							FUNCT_SLL : buffer <= 17'b 1 10 01 0 0000 00 11 0 0 0 0;
-							FUNCT_SRL : buffer <= 17'b 1 10 01 0 0001 00 11 0 0 0 0;
-							FUNCT_SRA : buffer <= 17'b 1 10 01 0 0010 00 11 0 0 0 0;
-							FUNCT_JR :  buffer <= 17'b 0 10 00 1 0011 11 00 0 0 0 0;
-							FUNCT_ADD : buffer <= 17'b 1 10 00 1 0011 00 11 0 0 0 0;
-							FUNCT_SUB : buffer <= 17'b 1 10 00 1 0100 00 11 0 0 0 0;
-							FUNCT_AND : buffer <= 17'b 1 10 00 1 0101 00 11 0 0 0 0;
-							FUNCT_OR :  buffer <= 17'b 1 10 00 1 0110 00 11 0 0 0 0;
-							FUNCT_XOR : buffer <= 17'b 1 10 00 1 0111 00 11 0 0 0 0;
-							FUNCT_SLT : buffer <= 17'b 1 10 00 1 1000 00 11 0 0 0 0;
+							FUNCT_SLL : buffer <= 17'b1_10_01_0_0000_00_11_0_0_0_0;
+							FUNCT_SRL : buffer <= 17'b1_10_01_0_0001_00_11_0_0_0_0;
+							FUNCT_SRA : buffer <= 17'b1_10_01_0_0010_00_11_0_0_0_0;
+							FUNCT_JR :  buffer <= 17'b0_10_00_1_0011_11_00_0_0_0_0;
+							FUNCT_ADD : buffer <= 17'b1_10_00_1_0011_00_11_0_0_0_0;
+							FUNCT_SUB : buffer <= 17'b1_10_00_1_0100_00_11_0_0_0_0;
+							FUNCT_AND : buffer <= 17'b1_10_00_1_0101_00_11_0_0_0_0;
+							FUNCT_OR :  buffer <= 17'b1_10_00_1_0110_00_11_0_0_0_0;
+							FUNCT_XOR : buffer <= 17'b1_10_00_1_0111_00_11_0_0_0_0;
+							FUNCT_SLT : buffer <= 17'b1_10_00_1_1000_00_11_0_0_0_0;
 						endcase
 					end
-			OP_JP :    buffer <= 17'b 0 10 11 1 1111 11 01 0 0 0 0;
-			OP_JAL :   buffer <= 17'b 1 11 11 1 1111 10 01 0 0 0 0;
-			OP_BEQ :   buffer <= 17'b 0 10 00 1 1001 00 10 0 0 0 0;
-			OP_BNE :   buffer <= 17'b 0 10 00 1 1010 00 10 0 0 0 0;
-			OP_ADDI :  buffer <= 17'b 1 10 10 1 0011 01 11 0 0 0 0;
-			OP_ANDI :  buffer <= 17'b 1 10 10 1 0101 01 11 0 0 0 0;
-			OP_ORI :   buffer <= 17'b 1 10 10 1 0110 01 11 0 0 0 0;
-			OP_LW :    buffer <= 17'b 1 01 10 1 0011 01 11 0 1 0 0;
-			OP_SW :    buffer <= 17'b 0 10 10 1 0011 11 11 1 0 0 0;
-			OP_IN :    buffer <= 17'b 0 10 11 1 1111 00 11 0 0 1 0;
-			OP_OUT :   buffer <= 17'b 0 10 11 1 1111 11 11 0 0 0 1;
+			OP_JP :    buffer <= 17'b0_10_11_1_1111_11_01_0_0_0_0;
+			OP_JAL :   buffer <= 17'b1_11_11_1_1111_10_01_0_0_0_0;
+			OP_BEQ :   buffer <= 17'b0_10_00_1_1001_00_10_0_0_0_0;
+			OP_BNE :   buffer <= 17'b0_10_00_1_1010_00_10_0_0_0_0;
+			OP_ADDI :  buffer <= 17'b1_10_10_1_0011_01_11_0_0_0_0;
+			OP_ANDI :  buffer <= 17'b1_10_10_1_0101_01_11_0_0_0_0;
+			OP_ORI :   buffer <= 17'b1_10_10_1_0110_01_11_0_0_0_0;
+			OP_LW :    buffer <= 17'b1_01_10_1_0011_01_11_0_1_0_0;
+			OP_SW :    buffer <= 17'b0_10_10_1_0011_11_11_1_0_0_0;
+			OP_IN :    buffer <= 17'b0_10_11_1_1111_00_11_0_0_1_0;
+			OP_OUT :   buffer <= 17'b0_10_11_1_1111_11_11_0_0_0_1;
 		endcase
 	end
 endmodule

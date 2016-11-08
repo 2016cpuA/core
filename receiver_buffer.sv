@@ -14,8 +14,9 @@ module receiver_buffer(
 					if (valid) begin
 						buffer[31:24] <= data;
 						state <= state + 1;
-				end else begin
+				    end else begin
 						ready <= 0;
+				    end
 				end
 			1 : begin
 					if (valid) begin

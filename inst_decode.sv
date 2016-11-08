@@ -29,7 +29,7 @@ module inst_decode #(
 	output logic [25:0] inst_index,
 	output logic [INST_MEM_WIDTH-1:0] pc_next,
 	output logic [INST_MEM_WIDTH-1:0] pc1_next
-)
+);
 	logic [5:0] opcode;
 	logic [4:0] rs;
 

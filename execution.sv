@@ -34,7 +34,7 @@ module execution #(
 	output logic [INST_MEM_WIDTH-1:0] pc_next,
 	output logic [INST_MEM_WIDTH-1:0] pc1_next,
 	output logic [INST_MEM_WIDTH-1:0] pc2
-)
+);
 	logic [31:0] op1;
 	logic [31:0] op2;
 

@@ -16,10 +16,10 @@ module data_memory #(
 			state <= 0;
 		end
 		if (MemWrite) begin
-			data_mem[address[DATA_MEM_WIDTH-1:0] <= write_data;
+			data_mem[address[DATA_MEM_WIDTH-1:0]] <= write_data;
 		end;
 		if (MemRead) begin
-			read_data <= data_mem[address[DATA_MEM_WIDTH-1:0];
+			read_data <= data_mem[address[DATA_MEM_WIDTH-1:0]];
 		end
 	end
 endmodule

@@ -8,7 +8,7 @@ module pc_generator #(
 	input logic [WIDTH_G-1:0] pc2, //BEQ,BNE,default
 	input logic [WIDTH_G-1:0] pc3, //BEQ,BNE,default
 	input logic enable,
-	output logic [WIDTH_G-1:0] pc,
+	output logic [WIDTH_G-1:0] pc
 );
 	always_comb begin
 		if (reset) begin

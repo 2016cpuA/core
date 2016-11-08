@@ -406,7 +406,7 @@ module top #(  // todo : reset system
 	pc1_to_ex <= pc1_next_from_id;
 
 	//inst_fetch
-	pc_to_if <= pc_generated_from_wb
-	pc1_to_if <= pc1_next_from_wb
+	pc_to_if <= pc_generated_from_wb;
+	pc1_to_if <= pc1_next_from_wb;
 	end
 endmodule
