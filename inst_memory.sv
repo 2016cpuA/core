@@ -1,4 +1,4 @@
-module inst_memory #(
+module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 	parameter INST_MEM_WIDTH = 2
 ) (
 	input logic CLK,

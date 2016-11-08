@@ -1,11 +1,11 @@
-module inst_fetch #(
+module inst_fetch #(//前提：loader_ready = input_validは一瞬しか上がらない
 	parameter INST_MEM_WIDTH = 2
 ) (
 	input logic CLK, 
 	input logic reset,
 	input logic pc,
 	input logic pc1,
-	input logic input_data, //program loader
+	input logic [7:0] input_data, //program loader
 	input logic input_start, //program loader
 	input logic input_end, //program loader
 	input logic input_valid,//prorgram loader

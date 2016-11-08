@@ -32,6 +32,9 @@ module write_buffer_pc_generate #(
 	pc_adder pc_adder_instance(pc_generated, 1, pc1_next);
 
 	always_comb begin
+		if (reset) begin
+			RegWrite_next <= 0;
+		end
 		RegWrite_next <= RegWrite;
 		rd_next <= rd;
 	end

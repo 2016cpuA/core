@@ -1,4 +1,4 @@
-module register #(
+module register #( ///r no syokika?
 	parameter REG_NUM = 32
 ) (
 	input logic RegWrite,
@@ -15,7 +15,7 @@ module register #(
 
 	always_comb begin
 		if (reset) begin
-			r <= 0;
+			r <= 0;///ayasii
 			op1_sub <= 0;
 			op2_sub <= 0;
 		end
