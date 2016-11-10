@@ -83,11 +83,11 @@ module execution_test #(
 		UARTtoReg <= 0;
 		RegtoUART <= 0;
 		#WAIT;
-		//op2 = op2_sub, op1 = op1_sub, 
+		//op2 = op2_sub, op1 = op1_sub, Op = +, dist = rd
 		ALUSrcs <= 2'b00;
 		ALUSrcs2 <= 1;
-		ALUOp <= 4'b;
-		RegDist <= 2'b;
+		ALUOp <= 4'b0010;
+		RegDist <= 2'b00;
 		op1_sub <= 32'h00001010;
 		op2_sub <= 32'h00000101;
 		rt <= 5'b00001;
