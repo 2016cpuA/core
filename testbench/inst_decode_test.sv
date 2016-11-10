@@ -68,7 +68,7 @@ module inst_decode_test #(
 		#WAIT;
 		reset <= 0;
 		#WAIT;
-		inst <= 32'h00c21004; //ADD %r1,%r2,%r3
+		inst <= 32'h00430820; //ADD %r1,%r2,%r3
 		pc <= 1;
 		pc1 <= 1;
 		RegWrite_before <= 0;
@@ -76,7 +76,7 @@ module inst_decode_test #(
 		data <= 32'h1010101010;
 		address <= 5'b00001;
 		#WAIT;
-		inst <= 32'h00650458; //SUB %r4,%r5,%r6
+		inst <= 32'h00a62022; //SUB %r4,%r5,%r6
 		pc <= 1;
 		pc1 <= 1;
 		RegWrite_before <= 1;

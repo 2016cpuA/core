@@ -297,8 +297,8 @@ module top #(  // todo : reset system
 	logic [4:0] rd_to_wb;
 	logic [25:0] inst_index_to_wb;
 	logic [INST_MEM_WIDTH-1:0] pc_to_wb;
-	logic [INET_MEM_WIDTH-1:0] pc1_to_wb;
-	logic [INET_MEM_WIDTH-1:0] pc2_to_wb;
+	logic [INST_MEM_WIDTH-1:0] pc1_to_wb;
+	logic [INST_MEM_WIDTH-1:0] pc2_to_wb;
 	logic input_ready_to_wb;
 	logic [31:0] input_data_to_wb;
 	logic RegWrite_next_from_wb;
@@ -308,7 +308,7 @@ module top #(  // todo : reset system
 	logic [INST_MEM_WIDTH-1:0] pc_generated_from_wb;
 	logic [INST_MEM_WIDTH-1:0] pc1_next_from_wb;
 
-	write_buffer_pc_generator #(INST_MEM_WIDTH) write_buffer_pc_generator_instancc(
+	write_buffer_pc_generate #(INST_MEM_WIDTH) write_buffer_pc_generator_instance(
 			reset, 
 			RegWrite_to_wb, 
 			MemtoReg_to_wb, 
@@ -338,31 +338,31 @@ module top #(  // todo : reset system
 	assign input_start_to_if 	= sw_n_10;
 	assign input_end_to_if 		= sw_s_8;
 	assign input_valid_to_if 	= receiver_valid;
-	assign RegWrite_to_mem 		= RegWrite_from_ex;
-	assign MemtoReg_to_mem 		= MemtoReg_from_ex;
-	assign Branch_to_mem 		= Branch_from_ex;
-	assign MemWrite_to_mem 		= Memwrite_from_ex;
-	assign MemRead_to_mem 		= MemRead_from_ex;
-	assign UARTtoReg_to_mem 	= UARTtoReg_from_ex;
+	assign RegWrite_to_mem 		= RegWrite_next_from_ex;
+	assign MemtoReg_to_mem 		= MemtoReg_next_from_ex;
+	assign Branch_to_mem 		= Branch_next_from_ex;
+	assign MemWrite_to_mem 		= MemWrite_next_from_ex;
+	assign MemRead_to_mem 		= MemRead_next_from_ex;
+	assign UARTtoReg_to_mem 	= UARTtoReg_next_from_ex;
 	assign register_data_to_mem = register_data_from_ex;
 	assign alu_result_to_mem 	= alu_result_from_ex;
 	assign rdist_to_mem 		= rdist_from_ex;
-	assign inst_index_to_mem 	= inst_index_from_ex;
-	assign pc_to_mem 			= pc_from_ex;
-	assign pc1_to_mem 			= pc1_from_ex;
+	assign inst_index_to_mem 	= inst_index_next_from_ex;
+	assign pc_to_mem 			= pc_next_from_ex;
+	assign pc1_to_mem 			= pc1_next_from_ex;
 	assign pc2_to_mem 			= pc2_from_ex;
-	assign RegWrite_to_wb 		= RegWrite_from_mem;
-	assign MemtoReg_to_wb 		= MemtoReg_from_mem;
-	assign Brabch_to_wb 		= Branch_from_mem;
-	assign UARTtoReg_to_wb 		= UARTtoReg_from_mem;
+	assign RegWrite_to_wb 		= RegWrite_next_from_mem;
+	assign MemtoReg_to_wb 		= MemtoReg_next_from_mem;
+	assign Brabch_to_wb 		= Branch_next_from_mem;
+	assign UARTtoReg_to_wb 		= UARTtoReg_next_from_mem;
 	assign read_data_to_wb 		= read_data_from_mem;
-	assign register_data_to_wb 	= register_data_from_mem;
-	assign alu_result_to_wb 	= alu_result_from_mem;
-	assign rd_to_wb 			= rdist_from_mem;
-	assign inst_index_to_wb 	= inst_index_from_mem;
-	assign pc_to_wb 			= pc_from_mem;
-	assign pc1_to_wb 			= pc1_from_mem;
-	assign pc2_to_wb 			= pc2_from_mem;
+	assign register_data_to_wb 	= register_data_next_from_mem;
+	assign alu_result_to_wb 	= alu_result_next_from_mem;
+	assign rd_to_wb 			= rdist_next_from_mem;
+	assign inst_index_to_wb 	= inst_index_next_from_mem;
+	assign pc_to_wb 			= pc_next_from_mem;
+	assign pc1_to_wb 			= pc1_next_from_mem;
+	assign pc2_to_wb 			= pc2_next_from_mem;
 	assign input_ready_to_wb 	= input_ready;
 	assign input_data_to_wb 	= input_data;
 

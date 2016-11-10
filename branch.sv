@@ -11,7 +11,7 @@ module branch(
 		case (Branch)
 			2'b00 : PCSrcs <= 2'b00; //JR
 			2'b01 : PCSrcs <= 2'b01; //J,JAL
-			2'b10 : if (aluresult) begin //BEQ.BNE
+			2'b10 : if (alu_result) begin //BEQ.BNE
 						PCSrcs <= 2'b10;
 					end else begin
 						PCSrcs <= 2'b11;

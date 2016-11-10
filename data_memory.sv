@@ -3,7 +3,7 @@ module data_memory #(
 ) (
 	input logic CLK,
 	input logic reset,
-	input logic [31:0] addres,
+	input logic [31:0] address,
 	input logic [31:0] write_data,
 	input logic MemWrite,
 	output logic [31:0] read_data,

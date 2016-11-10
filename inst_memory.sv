@@ -44,22 +44,22 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 			end
 		end else if (state == 1) begin
 			if (loader_ready) begin
-				loader_buf[7:0] <= loader_change;
+				loader_buf[7:0] <= loader_data;
 				state <= state + 1;
 			end
 		end else if (state == 2) begin
 			if (loader_ready) begin
-				loader_buf[15:8] <= loader_change;
+				loader_buf[15:8] <= loader_data;
 				state <= state + 1;
 			end
 		end else if (state == 3) begin
 			if (loader_ready) begin
-				loader_buf[23:16] <= loader_change;
+				loader_buf[23:16] <= loader_data;
 				state <= state + 1;
 			end
 		end else if (state == 4) begin
 			if (loader_ready) begin
-				loader_buf[31:24] <= loader_change;
+				loader_buf[31:24] <= loader_data;
 				state <= state + 1;
 			end
 		end else if (state == 5) begin

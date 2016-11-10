@@ -1,8 +1,8 @@
 module dist_sel(
-	input [1:0] RegDist,
-	input [4:0] rd,
-	input [4:0] rt,
-	output [4:0] rdist
+	input logic [1:0] RegDist,
+	input logic [4:0] rd,
+	input logic [4:0] rt,
+	output logic [4:0] rdist
 );
 	always_comb begin
 		case (RegDist)

@@ -38,7 +38,7 @@ module memory_access #(
 		Branch_next <= Branch;
 		UARTtoReg_next <= UARTtoReg;
 		register_data_next <= register_data;
-		alu_data_next <= alu_data;
+		alu_result_next <= alu_result;
 		rdist_next <= rdist;
 		inst_index_next <= inst_index;
 		pc_next <= pc;

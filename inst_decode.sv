@@ -32,6 +32,7 @@ module inst_decode #(
 );
 	logic [5:0] opcode;
 	logic [4:0] rs;
+	logic [5:0] funct;
 
 	inst_decoder inst_decoder_instance(
 			inst, 
@@ -39,7 +40,8 @@ module inst_decode #(
 			rs, 
 			rt, 
 			rd, 
-			sa, 
+			sa,
+			funct, 
 			immediate, 
 			inst_index
 	);
@@ -72,6 +74,6 @@ module inst_decode #(
 	);
 	always_comb begin
 		pc_next <= pc;
-		pc1_next <= px1;
+		pc1_next <= pc1;
 	end
 endmodule

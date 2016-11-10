@@ -5,7 +5,7 @@ module inst_fetch_test #(
 	logic reset;
 	logic [INST_MEM_WIDTH-1:0] pc;
 	logic [INST_MEM_WIDTH-1:0] pc1;
-	logic input_data; //program loader
+	logic [7:0] input_data; //program loader
 	logic input_start; //program loader
 	logic input_end; //program loader
 	logic input_valid;//prorgram loader
@@ -21,7 +21,7 @@ module inst_fetch_test #(
 	localparam WAIT = 5000;
 	localparam CLK_ = 1;
 
-	inst_fetch #(INST_MEM_WIDTH) (
+	inst_fetch #(INST_MEM_WIDTH) inst_fetch_instance(
 		CLK,
 		reset,
 		pc,
@@ -47,35 +47,35 @@ module inst_fetch_test #(
 		#WAIT;
 		reset <= 1;
 		#WAIT;
+		reset <= 0;
 		pc <= 0;
 		pc1 <= 1;
 		#WAIT;
 		input_start <= 1;
 		#WAIT;
-		input_data <= 8'h00;
-		input_valid <= 0;
-		#WAIT;
+		input_start <= 0; 
+		input_data <= 8'h04;
 		input_valid <= 1;
 		#CLK_;
 		input_valid <= 0;
 		#WAIT;	
-		input_data <= 8'hc2;
-		#WAIT;
-		input_valid <= 1;
-		#CLK_;
-		input_valid <= 0;
-		#WAIT;
 		input_data <= 8'h10;
-		#WAIT;
 		input_valid <= 1;
 		#CLK_;
 		input_valid <= 0;
 		#WAIT;
-		input_data <= 8'h04;
+		input_data <= 8'hc2;
+        input_valid <= 1;
+        #CLK_;
+        input_valid <= 0;
+        #WAIT;
+        input_data <= 8'h00;
+        input_valid <= 1;
+        #CLK_;
+        input_valid <= 0;
 		#WAIT;
-		input_valid <= 1;
-		#CLK_;
-		input_valid <= 0;
+		input_end <= 1;
 		#WAIT;
 		input_end <= 0;
+    end
 endmodule
