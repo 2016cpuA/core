@@ -1,10 +1,12 @@
-module register_write(
+module register_write #(
+	parameter INST_MEM_WIDTH = 2
+) (
 	input logic [1:0] MemtoReg,
 	input logic UARTtoReg,
 	input logic reset,
 	input logic [31:0] read_data,
 	input logic [31:0] alu_result,
-	input logic [31:0] pc,
+	input logic [INST_MEM_WIDTH-1:0] pc,
 	input logic [31:0] input_data,
 	input logic input_ready,
 	output logic UART_write_enable,

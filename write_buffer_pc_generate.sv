@@ -3,8 +3,8 @@ module write_buffer_pc_generate #(
 ) (
 	input logic reset,
 	input logic RegWrite,
-	input logic MemtoReg,
-	input logic Brabch,
+	input logic [1:0] MemtoReg,
+	input logic [1:0] Branch,
 	input logic UARTtoReg,
 	input logic [31:0] read_data,
 	input logic [31:0] register_data,
@@ -27,7 +27,7 @@ module write_buffer_pc_generate #(
 	logic [1:0] PCSrcs;
 
 	branch branch_instance(Branch, alu_result, reset, PCSrcs);
-	register_write register_write_instance(MemtoReg, UARTtoReg, reset, read_data, alu_result, pc, input_data, input_ready, UART_write_enable, pc_enable, data);
+	register_write #(INST_MEM_WIDTH) register_write_instance(MemtoReg, UARTtoReg, reset, read_data, alu_result, pc, input_data, input_ready, UART_write_enable, pc_enable, data);
 	pc_generator pc_generator_instance(PCSrcs, reset, register_data[INST_MEM_WIDTH-1:0], inst_index[INST_MEM_WIDTH-1:0], pc2, pc1, pc_enable, pc_generated);
 	pc_adder pc_adder_instance(pc_generated, 1, pc1_next);
 
