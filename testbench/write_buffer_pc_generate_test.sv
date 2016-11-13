@@ -73,16 +73,22 @@ module write_buffer_pc_generate_test #(
 		MemtoReg <= 2'b11;
 		#WAIT;
 		UARTtoReg <= 1;
-		input_ready <= 1;
 		#WAIT;
 		UARTtoReg <= 0;
+		input_ready <= 1;
 		#WAIT;
 		//branch_test
 		Branch <= 2'b00;
+		input_ready <= 0;
 		#WAIT;
 		Branch <= 2'b10;
 		alu_result <= 0;
 		#WAIT;
 		//���Ȥϼ�����
+		#WAIT;
+		#WAIT;
+		#WAIT;
+		#WAIT;
+		#WAIT;
 	end
 endmodule
