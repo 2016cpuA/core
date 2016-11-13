@@ -1,10 +1,10 @@
 module write_buffer_pc_generate_test #(
 	parameter INST_MEM_WIDTH = 2
-)
+);
 	logic reset;
 	logic RegWrite;
-	logic MemtoReg;
-	logic Brabch;
+	logic [1:0] MemtoReg;
+	logic [1:0] Branch;
 	logic UARTtoReg;
 	logic [31:0] read_data;
 	logic [31:0] register_data;
@@ -28,7 +28,7 @@ module write_buffer_pc_generate_test #(
 			reset,
 			RegWrite,
 			MemtoReg,
-			Brabch,
+			Branch,
 			UARTtoReg,
 			read_data,
 			register_data,
@@ -54,11 +54,17 @@ module write_buffer_pc_generate_test #(
 		#WAIT;
 		reset <= 0;
 		//register_write_test
+		RegWrite <= 0;
 		MemtoReg <= 2'b01;
 		UARTtoReg <= 0;
 		read_data <= 32'hffffffff;
+		register_data <= 32'haaaaaaaa;
 		alu_result <= 32'h11111111;
-		pc <= INST_MEM_WIDTH'b10;
+		rd <= 5'b11100;
+		inst_index <= 26'h1bbbbbb; 
+        pc <= 2'b10;
+		pc1 <= 2'b01;
+		pc2 <= 2'b11;
 		input_data <= 32'h55555555;
 		input_ready <= 0;
 		#WAIT;
@@ -75,6 +81,6 @@ module write_buffer_pc_generate_test #(
 		#WAIT;
 		Branch <= 2'b10;
 		#WAIT;
-		//¤¢¤È¤Ï¼«Á³¤Ë
+		//ï¿½ï¿½ï¿½È¤Ï¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	end
 endmodule
