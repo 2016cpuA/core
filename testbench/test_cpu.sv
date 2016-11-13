@@ -23,11 +23,12 @@ module test_top #(
 
 	initial begin
 		UART_RX <= 1;
+		sw_n_10 <= 0;
+		sw_s_8 <= 0;
 		#WAIT;
 		sw_c_7 <= 1;
 		#WAIT;
 		se_c_7 <= 0;
-
 	end	
 	//reset
 	logic reset;
