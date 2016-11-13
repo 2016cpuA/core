@@ -24,7 +24,7 @@ module register_write #(
 		case (MemtoReg)
 			2'b01 : if (!UARTtoReg) data <= read_data;
 			2'b10 : if (!UARTtoReg) data <= alu_result;
-			2'b11 : if (!UARTtoReg) data <= pc;
+			2'b11 : if (!UARTtoReg) data <= pc; //dataとpcの長さが違うが大丈夫か？
 			default : ;
 		endcase
 		if (UARTtoReg) begin
