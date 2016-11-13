@@ -33,6 +33,19 @@ module memory_access #(
 	data_memory #(DATA_MEM_WIDTH) data_memory_instance(CLK, reset, alu_result, register_data, MemWrite, read_data, MemRead);
 
 	always_ff @(posedge CLK) begin
+		if (reset) begin
+			RegWrite_next <= 0;
+			MemtoReg_next <= 2'b00;
+			Branch_next <= 2'b00;
+			UARTtoReg_next <= 0;
+			register_data_next <= 0;
+			alu_result_next <= 0;
+			rdist_next <= 0;
+			inst_index_next <= 0;
+			pc_next <= 0;
+			pc1_next <= 0;
+			pc2_next <= 0;
+		end
 		RegWrite_next <= RegWrite;
 		MemtoReg_next <= MemtoReg;
 		Branch_next <= Branch;

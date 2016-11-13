@@ -20,6 +20,7 @@ module register_write #(
 			UARTtoReg_buf <= 0;
 			UART_write_enable <= 0;
 			pc_enable <= 0;
+			data <= 0;
 		end
 		case (MemtoReg)
 			2'b01 : if (!UARTtoReg) data <= read_data;

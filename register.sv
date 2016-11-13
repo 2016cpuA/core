@@ -11,11 +11,12 @@ module register #( ///r no syokika?
 	output logic [31:0] op1_sub,
 	output logic [31:0] op2_sub
 );
-	logic [REG_NUM-1:0] [31:0] r;
+	logic [31:0] r [REG_NUM-1:0] = '{
+			default : 32'h00000000
+	};
 
 	always_comb begin
 		if (reset) begin
-			r <= 0;///ayasii
 			op1_sub <= 0;
 			op2_sub <= 0;
 		end

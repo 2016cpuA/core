@@ -29,7 +29,7 @@ module write_buffer_pc_generate #(
 	branch branch_instance(Branch, alu_result, reset, PCSrcs);
 	register_write #(INST_MEM_WIDTH) register_write_instance(MemtoReg, UARTtoReg, reset, read_data, alu_result, pc, input_data, input_ready, UART_write_enable, pc_enable, data);
 	pc_generator pc_generator_instance(PCSrcs, reset, register_data[INST_MEM_WIDTH-1:0], inst_index[INST_MEM_WIDTH-1:0], pc2, pc1, pc_enable, pc_generated);
-	pc_adder pc_adder_instance(pc_generated, 1, pc1_next);
+	pc_adder pc_adder_instance(reset, pc_generated, 1, pc1_next);
 
 	always_comb begin
 		if (reset) begin

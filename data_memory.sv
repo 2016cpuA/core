@@ -9,11 +9,14 @@ module data_memory #(
 	output logic [31:0] read_data,
 	input logic MemRead
 );
-	logic [31:0] data_mem [2**DATA_MEM_WIDTH-1:0];
+	logic [31:0] data_mem [2**DATA_MEM_WIDTH-1:0] = '{
+			default : 32'h00000000
+	};
 	integer state;
 	always @(posedge CLK) begin
 		if (reset) begin
 			state <= 0;
+			read_data <= 0;
 		end
 		if (MemWrite) begin
 			data_mem[address[DATA_MEM_WIDTH-1:0]] <= write_data;

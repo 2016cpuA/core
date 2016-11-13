@@ -13,7 +13,7 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 		0 : 32'hec000000,
 		1 : 32'hf0000000,
 		2 : 32'h20000001,
-		3 : 32'hf0000000
+		default : 32'hf0000000
 	};
 	logic [31:0] loader_buf;
 	logic [INST_MEM_WIDTH-1:0] loader_index;
