@@ -73,6 +73,7 @@ module write_buffer_pc_generate_test #(
 		MemtoReg <= 2'b11;
 		#WAIT;
 		UARTtoReg <= 1;
+		input_ready <= 1;
 		#WAIT;
 		UARTtoReg <= 0;
 		#WAIT;
@@ -80,6 +81,7 @@ module write_buffer_pc_generate_test #(
 		Branch <= 2'b00;
 		#WAIT;
 		Branch <= 2'b10;
+		alu_result <= 0;
 		#WAIT;
 		//���Ȥϼ�����
 	end
