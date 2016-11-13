@@ -86,7 +86,7 @@ module execution_test #(
 		//op2 = op2_sub, op1 = op1_sub, Op = +, dist = rd
 		ALUSrcs <= 2'b00;
 		ALUSrcs2 <= 1;
-		ALUOp <= 4'b0010;
+		ALUOp <= 4'b0011;
 		RegDist <= 2'b00;
 		op1_sub <= 32'h00001010;
 		op2_sub <= 32'h00000101;
