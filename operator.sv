@@ -1,7 +1,6 @@
 module operator(
 	input logic [5:0] opcode,
 	input logic [5:0] funct,
-	input logic reset,
 	output logic RegWrite,
 	output logic [1:0] MemtoReg,
 	output logic [1:0] ALUSrcs,
@@ -41,22 +40,19 @@ module operator(
 	localparam FUNCT_SLT = 6'b101010;
 
 	logic [17:0] buffer;
-	assign RegWrite  = buffer[17];
-	assign MemtoReg  = buffer[16:15];
-	assign ALUSrcs   = buffer[14:13];
-	assign ALUSrcs2  = buffer[12];
-	assign ALUOp 	 = buffer[11:8];
-	assign RegDist 	 = buffer[7:6];
-	assign Branch 	 = buffer[5:4];
-	assign MemWrite  = buffer[3];
-	assign MemRead 	 = buffer[2];
-	assign UARTtoReg = buffer[1];
-	assign RegtoUART = buffer[0];
+	assign RegWrite  = buffer[17];		//１ならregidsterにかきこむ
+	assign MemtoReg  = buffer[16:15];	//registerに書き込むデータを選択。01:memoryからのデータ。10:aluの計算結果。11:pc(JALの時のリンクレジスタへ)
+	assign ALUSrcs   = buffer[14:13];	//op2の選択。00:reg[rt]。01:sa。10:immediate。11:使わない
+	assign ALUSrcs2  = buffer[12];		//op1の選択。１ならreg[rs]。０ならreg[rt]
+	assign ALUOp 	 = buffer[11:8];	//aluの計算内容を選択。場合分けは面倒。aluを使わないものは1111を設定。
+	assign RegDist 	 = buffer[7:6];		//書き込みレジスタを選択。00:rd,01:rt,10:11111（リンクレジスタ）
+	assign Branch 	 = buffer[5:4];		//プログラムカウンタ更新先を選択。00:JR 01:J,JAL 10:BEQ,BNE 11:default
+	assign MemWrite  = buffer[3];		//１ならメモリに書き込む
+	assign MemRead 	 = buffer[2];		//１ならメモリから読む
+	assign UARTtoReg = buffer[1];		//１なら入力を受け取る
+	assign RegtoUART = buffer[0];		//１なら出力する
 
 	always_comb begin
-		if (reset) begin
-			buffer <= 0;	
-		end
 		case (opcode)
 			OP_SP : begin
 						case (funct)

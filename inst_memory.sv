@@ -7,16 +7,18 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 	input logic [7:0] loader_data,
 	input logic loader_enable,
 	output logic [31:0] inst,
+	output logic distinct,
 	input logic loader_ready
 );
 	logic [31:0] inst_mem [2**INST_MEM_WIDTH-1:0] = '{
-		0 : 32'hec000000,
-		1 : 32'hf0000000,
-		2 : 32'h20000001,
-		default : 32'hf0000000
+		0: 32'h20210001,//32'hec000000, //addi r0 r0 1
+		1 : 32'h20210002,//32'h00020008,//32'hf0000000, //jr r2
+		2 : 32'h20210001,//32'h0c000000,// jal 0
+		default : 32'h20210002//32'h08000002//32'hf0000000 //j 2
 	};
 	logic [31:0] loader_buf;
 	logic [INST_MEM_WIDTH-1:0] loader_index;
+	logic [INST_MEM_WIDTH-1:0] pc_buffer;
 	integer state;
 //	logic [7:0] order_change;
 	
@@ -35,9 +37,16 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 		if (reset) begin
 			loader_index <= 0;
 			state <= 0;
+			pc_buffer <= 1; //1 ha yabai kamo
+			distinct <= 1;
 		end
 	   	inst <= inst_mem[pc];
-		
+		if (pc != pc_buffer) begin
+			distinct <= 1;
+			pc_buffer <= pc;
+		end else begin
+			distinct <= 0;
+		end
 		if (state == 0) begin
 			if (loader_enable) begin
 				state <= state + 1;

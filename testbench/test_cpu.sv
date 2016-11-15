@@ -57,19 +57,18 @@ module test_top #(
 	logic input_start_to_if;
 	logic input_end_to_if;
 	logic input_valid_to_if;
+	logic distinct_from_if;
 	logic [31:0] inst_from_if;
 	logic inst_enable_from_if;
 	logic [INST_MEM_WIDTH-1:0] pc_next_from_if;
 	logic [INST_MEM_WIDTH-1:0] pc1_next_from_if;
 
 	//inst_decode
+	logic distinct_to_id;
 	logic [31:0] inst_to_id;
 	logic [INST_MEM_WIDTH-1:0] pc_to_id;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_id;
-	logic RegWrite_before_to_id;
-	logic UART_write_enable_to_id;
-	logic [31:0] data_to_id;
-	logic [4:0] address_to_id;
+	logic distinct_next_from_id;
  	logic RegWrite_from_id;
 	logic [1:0] MemtoReg_from_id;
 	logic [1:0] ALUSrcs_from_id;
@@ -81,8 +80,7 @@ module test_top #(
 	logic MemRead_from_id;
 	logic UARTtoReg_from_id;
 	logic RegtoUART_from_id;
-	logic [31:0] op1_from_id;
-	logic [31:0] op2_from_id;
+	logic [4:0] rs_from_id;
 	logic [4:0] rt_from_id;
 	logic [4:0] rd_from_id;
 	logic [4:0] sa_from_id;
@@ -91,7 +89,21 @@ module test_top #(
 	logic [INST_MEM_WIDTH-1:0] pc_next_from_id;
 	logic [INST_MEM_WIDTH-1:0] pc1_next_from_id;
 
+	//register
+	logic distinct_to_reg;
+	logic distinct_before_to_reg;
+	logic RegWrite_to_reg;
+	logic UART_write_enable_to_reg;
+	logic [4:0] rs_to_reg;
+	logic [4:0] rt_to_reg;
+	logic [4:0] rw_to_reg;
+	logic [31:0] write_data_to_reg;
+	logic distinct_next_from_reg;
+	logic [31:0] op1_sub_from_reg;
+	logic [31:0] op2_sub_from_reg;
+
 	//execution
+	logic distinct_to_ex;
 	logic RegWrite_to_ex;
 	logic [1:0] MemtoReg_to_ex;
 	logic [1:0] ALUSrcs_to_ex;
@@ -112,6 +124,7 @@ module test_top #(
 	logic [25:0] inst_index_to_ex;
 	logic [INST_MEM_WIDTH-1:0] pc_to_ex;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_ex;
+	logic distinct_next_from_ex;
  	logic RegWrite_next_from_ex;
 	logic [1:0] MemtoReg_next_from_ex;
 	logic [1:0] Branch_next_from_ex;
@@ -127,6 +140,7 @@ module test_top #(
 	logic [INST_MEM_WIDTH-1:0] pc2_from_ex;
 
 	//memory_access
+	logic distinct_to_mem;
  	logic RegWrite_to_mem;
 	logic [1:0] MemtoReg_to_mem;
 	logic [1:0] Branch_to_mem;
@@ -140,6 +154,7 @@ module test_top #(
 	logic [INST_MEM_WIDTH-1:0] pc_to_mem;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_mem;
 	logic [INST_MEM_WIDTH-1:0] pc2_to_mem;
+	logic distinct_next_from_mem;
  	logic RegWrite_next_from_mem;
 	logic [1:0] MemtoReg_next_from_mem;
 	logic [1:0] Branch_next_from_mem;
@@ -155,6 +170,7 @@ module test_top #(
 
 
 	//wriet_buffer_pc_generate
+	logic distinct_to_wb;
 	logic RegWrite_to_wb;
 	logic [1:0] MemtoReg_to_wb;
 	logic [1:0] Branch_to_wb;
@@ -169,6 +185,7 @@ module test_top #(
 	logic [INST_MEM_WIDTH-1:0] pc2_to_wb;
 	logic input_ready_to_wb;
 	logic [31:0] input_data_to_wb;
+	logic distinct_next_from_wb;
 	logic RegWrite_next_from_wb;
 	logic UART_write_enable_from_wb;
 	logic [31:0] data_from_wb;
@@ -220,6 +237,7 @@ module test_top #(
 			input_start_to_if, 
 			input_end_to_if, 
 			input_valid_to_if,
+			distinct_from_if,
 			inst_from_if, 
 			inst_enable_from_if, 
 			pc_next_from_if, 
@@ -228,14 +246,11 @@ module test_top #(
 	
 	//inst decode
 	inst_decode #(INST_MEM_WIDTH) inst_decode_instance(
-			reset, 
+			distinct_to_id,
 			inst_to_id, 
 			pc_to_id, 
 			pc1_to_id, 
-			RegWrite_before_to_id, 
-			UART_write_enable_to_id, 
-			data_to_id, 
-			address_to_id, 
+			distinct_next_from_id,
 			RegWrite_from_id, 
 			MemtoReg_from_id, 
 			ALUSrcs_from_id, 
@@ -247,8 +262,7 @@ module test_top #(
 			MemRead_from_id, 
 			UARTtoReg_from_id, 
 			RegtoUART_from_id, 
-			op1_from_id, 
-			op2_from_id, 
+			rs_from_id,
 			rt_from_id, 
 			rd_from_id, 
 			sa_from_id, 
@@ -258,8 +272,26 @@ module test_top #(
 			pc1_next_from_id
 	);
 
+	//register
+	register register_instance(
+			CLK,
+			reset,
+			distinct_to_reg,
+			distinct_before_to_reg,
+			RegWrite_to_reg;
+			UART_write_enable_to_reg;
+			rs_to_reg;
+			rt_to_reg;
+			rw_to_reg;
+			write_data_to_reg;
+			distinct_next_from_reg;
+			op1_sub_from_reg;
+			op2_sub_from_reg;
+	);
+				
 	//execution
 	execution #(INST_MEM_WIDTH) execution_instance(
+			distinct_to_ex,
 			RegWrite_to_ex, 
 			MemtoReg_to_ex, 
 			ALUSrcs_to_ex, 
@@ -280,6 +312,7 @@ module test_top #(
 			inst_index_to_ex, 
 			pc_to_ex, 
 			pc1_to_ex, 
+			distinct_next_from_ex,
 			RegWrite_next_from_ex, 
 			MemtoReg_next_from_ex, 
 			Branch_next_from_ex, 
@@ -299,6 +332,7 @@ module test_top #(
 	memory_access #(INST_MEM_WIDTH, DATA_MEM_WIDTH) memory_access_instance(
 			CLK, 
 			reset, 
+			distinct_to_mem,
 			RegWrite_to_mem, 
 			MemtoReg_to_mem, 
 			Branch_to_mem, 
@@ -312,6 +346,7 @@ module test_top #(
 			pc_to_mem, 
 			pc1_to_mem, 
 			pc2_to_mem, 
+			distinct_next_from_mem,
 			RegWrite_next_from_mem, 
 			MemtoReg_next_from_mem, 
 			Branch_next_from_mem, 
@@ -328,7 +363,7 @@ module test_top #(
 
 	//write buffer pc generate
 	write_buffer_pc_generate #(INST_MEM_WIDTH) write_buffer_pc_generator_instancc(
-			reset, 
+			distinct_to_wb,
 			RegWrite_to_wb, 
 			MemtoReg_to_wb, 
 			Branch_to_wb, 
@@ -343,6 +378,7 @@ module test_top #(
 			pc2_to_wb, 
 			input_ready_to_wb, 
 			input_data_to_wb, 
+			distinct_next_from_wb,
 			RegWrite_next_from_wb, 
 			UART_write_enable_from_wb, 
 			data_from_wb, 
@@ -388,41 +424,63 @@ module test_top #(
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 			led <= 0;
+			inst_to_id <= 0;
+			pc_to_id <= 0;
+			pc1_to_id <= 0;
+
+			//execution
+			RegWrite_to_ex <= 0;
+			MemtoReg_to_ex <= 0;
+			ALUSrcs_to_ex <= 0;
+			ALUSrcs2_to_ex <= 0;
+		   	ALUOp_to_ex <= 0;
+			RegDist_to_ex <= 0;
+			Branch_to_ex <= 0;
+			MemWrite_to_ex <= 0;
+			MemRead_to_ex <= 0;
+			UARTtoReg_to_ex <= 0;
+			RegtoUART_to_ex <= 0;
+			op1_sub_to_ex <= 0;
+			op2_sub_to_ex <= 0;
+			rt_to_ex <= 0; 
+			rd_to_ex <= 0;
+			sa_to_ex <= 0;
+			immediate_to_ex <= 0;
+			inst_index_to_ex <= 0;
+			pc_to_ex <= 0;
+			pc1_to_ex <= 0;
+		end else begin
+
+			//inst_decode
+			if (inst_enable_from_if) begin
+				distinct_to_id <= distinct_from_if;
+				inst_to_id <= inst_from_if;
+				pc_to_id <= pc_next_from_if;
+				pc1_to_id <= pc1_next_from_if;
+			end
+			//execution
+			RegWrite_to_ex <= RegWrite_from_id;
+			MemtoReg_to_ex <= MemtoReg_from_id;
+			ALUSrcs_to_ex <= ALUSrcs_from_id;
+			ALUSrcs2_to_ex <= ALUSrcs2_from_id;
+ 		  	ALUOp_to_ex <= ALUOp_from_id;
+			RegDist_to_ex <= RegDist_from_id;
+			Branch_to_ex <= Branch_from_id;
+			MemWrite_to_ex <= MemWrite_from_id;
+			MemRead_to_ex <= MemRead_from_id;
+			UARTtoReg_to_ex <= UARTtoReg_from_id;
+			RegtoUART_to_ex <= RegtoUART_from_id;
+			op1_sub_to_ex <= op1_from_id;
+			op2_sub_to_ex <= op2_from_id;
+			rt_to_ex <= rt_from_id; 
+			rd_to_ex <= rd_from_id;
+			sa_to_ex <= sa_from_id;
+			immediate_to_ex <= immediate_from_id;
+			inst_index_to_ex <= inst_index_from_id;
+			pc_to_ex <= pc_next_from_id;
+			pc1_to_ex <= pc1_next_from_id;
+
+			//inst_fetch
 		end
-
-	//inst_decode
-	if (inst_enable_from_if) begin
-		inst_to_id <= inst_from_if;
-		pc_to_id <= pc_next_from_if;
-		pc1_to_id <= pc1_next_from_if;
-	end
-	RegWrite_before_to_id <= RegWrite_next_from_wb;
-	UART_write_enable_to_id <= UART_write_enable_from_wb;
-	data_to_id <= data_from_wb;
-	address_to_id <= rd_next_from_wb;
-
-	//execution
-	RegWrite_to_ex <= RegWrite_from_id;
-	MemtoReg_to_ex <= MemtoReg_from_id;
-	ALUSrcs_to_ex <= ALUSrcs_from_id;
-	ALUSrcs2_to_ex <= ALUSrcs2_from_id;
-   	ALUOp_to_ex <= ALUOp_from_id;
-	RegDist_to_ex <= RegDist_from_id;
-	Branch_to_ex <= Branch_from_id;
-	MemWrite_to_ex <= MemWrite_from_id;
-	MemRead_to_ex <= MemRead_from_id;
-	UARTtoReg_to_ex <= UARTtoReg_from_id;
-	RegtoUART_to_ex <= RegtoUART_from_id;
-	op1_sub_to_ex <= op1_from_id;
-	op2_sub_to_ex <= op2_from_id;
-	rt_to_ex <= rt_from_id; 
-	rd_to_ex <= rd_from_id;
-	sa_to_ex <= sa_from_id;
-	immediate_to_ex <= immediate_from_id;
-	inst_index_to_ex <= inst_index_from_id;
-	pc_to_ex <= pc_next_from_id;
-	pc1_to_ex <= pc1_next_from_id;
-
-	//inst_fetch
 	end
 endmodule

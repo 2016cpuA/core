@@ -3,7 +3,6 @@ module register_write #(
 ) (
 	input logic [1:0] MemtoReg,
 	input logic UARTtoReg,
-	input logic reset,
 	input logic [31:0] read_data,
 	input logic [31:0] alu_result,
 	input logic [INST_MEM_WIDTH-1:0] pc,
@@ -16,12 +15,6 @@ module register_write #(
 	logic UARTtoReg_buf;
 
 	always_comb begin
-		if (reset) begin
-			UARTtoReg_buf <= 0;
-			UART_write_enable <= 0;
-			pc_enable <= 0;
-			data <= 0;
-		end
 		case (MemtoReg)
 			2'b01 : if (!UARTtoReg) data <= read_data;
 			2'b10 : if (!UARTtoReg) data <= alu_result;

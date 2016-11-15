@@ -17,7 +17,7 @@ module alu (
 			4'b1000 : alu_result <= $signed(op1) < $signed(op2);
 			4'b1001 : alu_result <= op1 == op2;
 			4'b1010 : alu_result <= op1 != op2;
-			default : ;
+			default : alu_result <= 0;
 		endcase
 	end
 endmodule

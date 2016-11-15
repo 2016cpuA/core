@@ -4,6 +4,7 @@ module memory_access #(
 ) (
 	input logic CLK,
 	input logic reset,
+	input logic distinct,
  	input logic RegWrite,
 	input logic [1:0] MemtoReg,
 	input logic [1:0] Branch,
@@ -17,6 +18,7 @@ module memory_access #(
 	input logic [INST_MEM_WIDTH-1:0] pc,
 	input logic [INST_MEM_WIDTH-1:0] pc1,
 	input logic [INST_MEM_WIDTH-1:0] pc2,
+	output logic distinct_next,
  	output logic RegWrite_next,
 	output logic [1:0] MemtoReg_next,
 	output logic [1:0] Branch_next,
@@ -34,6 +36,7 @@ module memory_access #(
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin
+			distinct_next <= 1;
 			RegWrite_next <= 0;
 			MemtoReg_next <= 2'b00;
 			Branch_next <= 2'b00;
@@ -45,17 +48,19 @@ module memory_access #(
 			pc_next <= 0;
 			pc1_next <= 0;
 			pc2_next <= 0;
+		end else begin
+			distinct_next <= distinct;
+			RegWrite_next <= RegWrite;
+			MemtoReg_next <= MemtoReg;
+			Branch_next <= Branch;
+			UARTtoReg_next <= UARTtoReg;
+			register_data_next <= register_data;
+			alu_result_next <= alu_result;
+			rdist_next <= rdist;
+			inst_index_next <= inst_index;
+			pc_next <= pc;
+			pc1_next <= pc1;
+			pc2_next <= pc2;
 		end
-		RegWrite_next <= RegWrite;
-		MemtoReg_next <= MemtoReg;
-		Branch_next <= Branch;
-		UARTtoReg_next <= UARTtoReg;
-		register_data_next <= register_data;
-		alu_result_next <= alu_result;
-		rdist_next <= rdist;
-		inst_index_next <= inst_index;
-		pc_next <= pc;
-		pc1_next <= pc1;
-		pc2_next <= pc2;
 	end
 endmodule
