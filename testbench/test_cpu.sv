@@ -89,18 +89,52 @@ module test_top #(
 	logic [INST_MEM_WIDTH-1:0] pc_next_from_id;
 	logic [INST_MEM_WIDTH-1:0] pc1_next_from_id;
 
-	//register
-	logic distinct_to_reg;
-	logic distinct_before_to_reg;
-	logic RegWrite_to_reg;
-	logic UART_write_enable_to_reg;
-	logic [4:0] rs_to_reg;
-	logic [4:0] rt_to_reg;
-	logic [4:0] rw_to_reg;
-	logic [31:0] write_data_to_reg;
-	logic distinct_next_from_reg;
-	logic [31:0] op1_sub_from_reg;
-	logic [31:0] op2_sub_from_reg;
+	//operand_fetch
+	logic distinct_to_op;
+	logic distinct_before_to_op;
+	logic RegWrite_before_to_op;
+	logic UART_write_enable_to_op;
+	logic [4:0] rs_to_op;
+	logic [4:0] rt_to_op;
+	logic [4:0] rw_to_op;
+	logic [31:0] write_data_to_op;
+ 	logic RegWrite_to_op;
+	logic [1:0] MemtoReg_to_op;
+	logic [1:0] ALUSrcs_to_op;
+	logic ALUSrcs2_to_op;
+	logic [3:0] ALUOp_to_op;
+	logic [1:0] RegDist_to_op;
+	logic [1:0] Branch_to_op;
+	logic MemWrite_to_op;
+	logic MemRead_to_op;
+	logic UARTtoReg_to_op;
+	logic RegtoUART_to_op;
+	logic [4:0] rd_to_op;
+	logic [4:0] sa_to_op;
+	logic [15:0] immediate_to_op;
+	logic [25:0] inst_index_to_op;
+	logic [INST_MEM_WIDTH-1:0] pc_to_op;
+	logic [INST_MEM_WIDTH-1:0] pc1_to_op;
+	logic distinct_next_from_op;
+	logic [31:0] op1_sub_from_op;
+	logic [31:0] op2_sub_from_op;
+	logic RegWrite_next_from_op;
+	logic [1:0] MemtoReg_next_from_op;
+	logic [1:0] ALUSrcs_next_from_op;
+	logic ALUSrcs2_next_from_op;
+	logic [3:0] ALUOp_next_from_op;
+	logic [1:0] RegDist_next_from_op;
+	logic [1:0] Branch_next_from_op;
+	logic MemWrite_next_from_op;
+	logic MemRead_next_from_op;
+	logic UARTtoReg_next_from_op;
+	logic RegtoUART_next_from_op;
+	logic [4:0] rd_next_from_op;
+	logic [4:0] sa_next_from_op;
+	logic [15:0] immediate_next_from_op;
+	logic [25:0] inst_index_next_from_op;
+	logic [INST_nextMEM_WIDTH-1:0] pc_next_from_op;
+	logic [INST_nextMEM_WIDTH-1:0] pc1_next_from_op;
 
 	//execution
 	logic distinct_to_ex;
@@ -272,23 +306,57 @@ module test_top #(
 			pc1_next_from_id
 	);
 
-	//register
-	register register_instance(
+	//operand_fetch
+	operand_fetch #(INST_MEM_WIDTH) operand_fetch_instance(
 			CLK,
 			reset,
-			distinct_to_reg,
-			distinct_before_to_reg,
-			RegWrite_to_reg;
-			UART_write_enable_to_reg;
-			rs_to_reg;
-			rt_to_reg;
-			rw_to_reg;
-			write_data_to_reg;
-			distinct_next_from_reg;
-			op1_sub_from_reg;
-			op2_sub_from_reg;
+			distinct_to_op,
+			distinct_before_to_op,
+			RegWrite_before_to_op,
+			UART_write_enable_to_op,
+			rs_to_op,
+			rt_to_op,
+			rw_to_op,
+			write_data_to_op,
+ 			RegWrite_to_op,
+			MemtoReg_to_op,
+			ALUSrcs_to_op,
+			ALUSrcs2_to_op,
+			ALUOp_to_op,
+			RegDist_to_op,
+			Branch_to_op,
+			MemWrite_to_op,
+			MemRead_to_op,
+			UARTtoReg_to_op,
+			RegtoUART_to_op,
+			rd_to_op,
+			sa_to_op,
+			immediate_to_op,
+			inst_index_to_op,
+			pc_to_op,
+			pc1_to_op,
+			distinct_next_from_op,
+			op1_sub_from_op,
+			op2_sub_from_op,
+			RegWrite_next_from_op,
+			MemtoReg_next_from_op,
+			ALUSrcs_next_from_op,
+			ALUSrcs2_next_from_op,
+			ALUOp_next_from_op,
+			RegDist_next_from_op,
+			Branch_next_from_op,
+			MemWrite_next_from_op,
+			MemRead_next_from_op,
+			UARTtoReg_next_from_op,
+			RegtoUART_next_from_op,
+			rd_next_from_op,
+			sa_next_from_op,
+			immediate_next_from_op,
+			inst_index_next_from_op,
+			pc_next_from_op,
+			pc1_next_from_op
 	);
-				
+			
 	//execution
 	execution #(INST_MEM_WIDTH) execution_instance(
 			distinct_to_ex,
@@ -387,100 +455,102 @@ module test_top #(
 			pc1_next_from_wb
 	);
 
-	assign pc_to_if 			= pc_generated_from_wb;
-	assign pc1_to_if 			= pc1_next_from_wb;
-	assign input_data_to_if 	= receiver_data;
-	assign input_start_to_if 	= sw_n_10;
-	assign input_end_to_if 		= sw_s_8;
-	assign input_valid_to_if 	= receiver_valid;
-	assign RegWrite_to_mem 		= RegWrite_next_from_ex;
-	assign MemtoReg_to_mem 		= MemtoReg_next_from_ex;
-	assign Branch_to_mem 		= Branch_next_from_ex;
-	assign MemWrite_to_mem 		= MemWrite_next_from_ex;
-	assign MemRead_to_mem 		= MemRead_next_from_ex;
-	assign UARTtoReg_to_mem 	= UARTtoReg_next_from_ex;
-	assign register_data_to_mem = register_data_from_ex;
-	assign alu_result_to_mem 	= alu_result_from_ex;
-	assign rdist_to_mem 		= rdist_from_ex;
-	assign inst_index_to_mem 	= inst_index_next_from_ex;
-	assign pc_to_mem 			= pc_next_from_ex;
-	assign pc1_to_mem 			= pc1_next_from_ex;
-	assign pc2_to_mem 			= pc2_from_ex;
-	assign RegWrite_to_wb 		= RegWrite_next_from_mem;
-	assign MemtoReg_to_wb 		= MemtoReg_next_from_mem;
-	assign Branch_to_wb 		= Branch_next_from_mem;
-	assign UARTtoReg_to_wb 		= UARTtoReg_next_from_mem;
-	assign read_data_to_wb 		= read_data_from_mem;
-	assign register_data_to_wb 	= register_data_next_from_mem;
-	assign alu_result_to_wb 	= alu_result_next_from_mem;
-	assign rd_to_wb 			= rdist_next_from_mem;
-	assign inst_index_to_wb 	= inst_index_next_from_mem;
-	assign pc_to_wb 			= pc_next_from_mem;
-	assign pc1_to_wb 			= pc1_next_from_mem;
-	assign pc2_to_wb 			= pc2_next_from_mem;
-	assign input_ready_to_wb 	= input_ready;
-	assign input_data_to_wb 	= input_data;
-
+	assign pc_to_if 			   	= pc_generated_from_wb;
+	assign pc1_to_if 			   	= pc1_next_from_wb;
+	assign input_data_to_if 	   	= receiver_data;
+	assign input_start_to_if 	   	= sw_n_10;
+	assign input_end_to_if 		   	= sw_s_8;
+	assign input_valid_to_if 	   	= receiver_valid;
+	assign distinct_to_op 		   	= distinct_next_from_id;
+	assign distinct_before_to_op   	= distinct_next_from_wb;
+	assign RegWrite_before_to_op   	= RegWrite_next_from_wb;
+	assign UART_write_enable_to_op 	= UART_write_enable_from_wb;
+	assign rs_to_op 				= rs_from_id;
+	assign rt_to_op 				= rt_from_id;
+	assign rw_to_op					= rd_next_from_wb;
+	assign write_data_to_op 		= data_from_wb;
+ 	assign RegWrite_to_op 			= RegWrite_from_id;
+	assign MemtoReg_to_op 			= MemtoReg_from_id;
+	assign ALUSrcs_to_op 			= ALUSrcs_from_id;
+	assign ALUSrcs2_to_op 			= ALUSrcs2_from_id;
+	assign ALUOp_to_op 				= ALUOp_from_id;
+	assign RegDist_to_op 			= RegDist_from_id;
+	assign Branch_to_op 			= Branch_from_id;
+	assign MemWrite_to_op 			= MemWrite_from_id;
+	assign MemRead_to_op	 		= MemRead_from_id;
+	assign UARTtoReg_to_op 			= UARTtoReg_from_id;
+	assign RegtoUART_to_op 			= RegtoUART_from_id;
+	assign rd_to_op 				= rd_from_id;
+	assign sa_to_op 				= sa_from_id;
+	assign immediate_to_op		 	= immediate_from_id;
+	assign inst_index_to_op 		= inst_index_from_id;
+	assign pc_to_op 				= pc_next_from_id;
+	assign pc1_to_op 				= pc1_next_from_id;
+	assign distinct_to_ex 			= distinct_next_from_op;
+	assign RegWrite_to_ex 			= RegWrite_from_op;
+	assign MemtoReg_to_ex			= MemtoReg_from_op;
+	assign ALUSrcs_to_ex 			= ALUSrcs_from_op;
+	assign ALUSrcs2_to_ex		 	= ALUSrcs2_from_op;
+ 	assign ALUOp_to_ex 				= ALUOp_from_op;
+	assign RegDist_to_ex 			= RegDist_from_op;
+	assign Branch_to_ex 			= Branch_from_op;
+	assign MemWrite_to_ex 			= MemWrite_from_op;
+	assign MemRead_to_ex 			= MemRead_from_op;
+	assign UARTtoReg_to_ex 			= UARTtoReg_from_op;
+	assign RegtoUART_to_ex 			= RegtoUART_from_op;
+	assign op1_sub_to_ex 			= op1_from_op;
+	assign op2_sub_to_ex 			= op2_from_op;
+	assign rt_to_ex 				= rt_from_op; 
+	assign rd_to_ex 				= rd_from_op;
+	assign sa_to_ex 				= sa_from_op;
+	assign immediate_to_ex	 		= immediate_from_op;
+	assign inst_index_to_ex 		= inst_index_from_op;
+	assign pc_to_ex 				= pc_next_from_op;
+	assign pc1_to_ex 				= pc1_next_from_op;
+	assign distinct_to_mem			= distinct_next_from_ex;
+	assign RegWrite_to_mem 			= RegWrite_next_from_ex;
+	assign MemtoReg_to_mem 			= MemtoReg_next_from_ex;
+	assign Branch_to_mem 			= Branch_next_from_ex;
+	assign MemWrite_to_mem 			= MemWrite_next_from_ex;
+	assign MemRead_to_mem 			= MemRead_next_from_ex;
+	assign UARTtoReg_to_mem 		= UARTtoReg_next_from_ex;
+	assign register_data_to_mem 	= register_data_from_ex;
+	assign alu_result_to_mem 		= alu_result_from_ex;
+	assign rdist_to_mem 			= rdist_from_ex;
+	assign inst_index_to_mem 		= inst_index_next_from_ex;
+	assign pc_to_mem 				= pc_next_from_ex;
+	assign pc1_to_mem 				= pc1_next_from_ex;
+	assign pc2_to_mem 				= pc2_from_ex;
+	assign distinct_to_wb 			= distinct_next_from_mem;
+	assign RegWrite_to_wb 			= RegWrite_next_from_mem;
+	assign MemtoReg_to_wb 			= MemtoReg_next_from_mem;
+	assign Branch_to_wb 			= Branch_next_from_mem;
+	assign UARTtoReg_to_wb 			= UARTtoReg_next_from_mem;
+	assign read_data_to_wb 			= read_data_from_mem;
+	assign register_data_to_wb 		= register_data_next_from_mem;
+	assign alu_result_to_wb 		= alu_result_next_from_mem;
+	assign rd_to_wb 				= rdist_next_from_mem;
+	assign inst_index_to_wb 		= inst_index_next_from_mem;
+	assign pc_to_wb 				= pc_next_from_mem;
+	assign pc1_to_wb 				= pc1_next_from_mem;
+	assign pc2_to_wb 				= pc2_next_from_mem;
+	assign input_ready_to_wb 		= input_ready;
+	assign input_data_to_wb 		= input_data;
+	
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 			led <= 0;
+			distinct_to_id <= 1;
 			inst_to_id <= 0;
 			pc_to_id <= 0;
 			pc1_to_id <= 0;
-
-			//execution
-			RegWrite_to_ex <= 0;
-			MemtoReg_to_ex <= 0;
-			ALUSrcs_to_ex <= 0;
-			ALUSrcs2_to_ex <= 0;
-		   	ALUOp_to_ex <= 0;
-			RegDist_to_ex <= 0;
-			Branch_to_ex <= 0;
-			MemWrite_to_ex <= 0;
-			MemRead_to_ex <= 0;
-			UARTtoReg_to_ex <= 0;
-			RegtoUART_to_ex <= 0;
-			op1_sub_to_ex <= 0;
-			op2_sub_to_ex <= 0;
-			rt_to_ex <= 0; 
-			rd_to_ex <= 0;
-			sa_to_ex <= 0;
-			immediate_to_ex <= 0;
-			inst_index_to_ex <= 0;
-			pc_to_ex <= 0;
-			pc1_to_ex <= 0;
 		end else begin
-
-			//inst_decode
 			if (inst_enable_from_if) begin
 				distinct_to_id <= distinct_from_if;
 				inst_to_id <= inst_from_if;
 				pc_to_id <= pc_next_from_if;
 				pc1_to_id <= pc1_next_from_if;
 			end
-			//execution
-			RegWrite_to_ex <= RegWrite_from_id;
-			MemtoReg_to_ex <= MemtoReg_from_id;
-			ALUSrcs_to_ex <= ALUSrcs_from_id;
-			ALUSrcs2_to_ex <= ALUSrcs2_from_id;
- 		  	ALUOp_to_ex <= ALUOp_from_id;
-			RegDist_to_ex <= RegDist_from_id;
-			Branch_to_ex <= Branch_from_id;
-			MemWrite_to_ex <= MemWrite_from_id;
-			MemRead_to_ex <= MemRead_from_id;
-			UARTtoReg_to_ex <= UARTtoReg_from_id;
-			RegtoUART_to_ex <= RegtoUART_from_id;
-			op1_sub_to_ex <= op1_from_id;
-			op2_sub_to_ex <= op2_from_id;
-			rt_to_ex <= rt_from_id; 
-			rd_to_ex <= rd_from_id;
-			sa_to_ex <= sa_from_id;
-			immediate_to_ex <= immediate_from_id;
-			inst_index_to_ex <= inst_index_from_id;
-			pc_to_ex <= pc_next_from_id;
-			pc1_to_ex <= pc1_next_from_id;
-
-			//inst_fetch
 		end
 	end
 endmodule
