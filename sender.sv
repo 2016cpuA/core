@@ -23,7 +23,7 @@ module sender #(
 		end
 	end
 
-	always @(posedge CLK) begin
+	always_ff @(posedge CLK) begin
 		if (valid && ready) begin
 			state <= 3'b100;
 			buffer <= in;

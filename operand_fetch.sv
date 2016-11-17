@@ -1,5 +1,5 @@
 module operand_fetch #(
-	parameter INST_MEM_WIDTH = 2;
+	parameter INST_MEM_WIDTH = 2
 ) (
 	input logic CLK,
 	input logic reset,
@@ -42,12 +42,13 @@ module operand_fetch #(
 	output logic MemRead_next,
 	output logic UARTtoReg_next,
 	output logic RegtoUART_next,
+	output logic [4:0] rt_next,
 	output logic [4:0] rd_next,
 	output logic [4:0] sa_next,
 	output logic [15:0] immediate_next,
 	output logic [25:0] inst_index_next,
-	output logic [INST_nextMEM_WIDTH-1:0] pc_next,
-	output logic [INST_nextMEM_WIDTH-1:0] pc1_next
+	output logic [INST_MEM_WIDTH-1:0] pc_next,
+	output logic [INST_MEM_WIDTH-1:0] pc1_next
 );
 
 	register register_instance(
@@ -64,7 +65,7 @@ module operand_fetch #(
 			op2_sub
 	);
 
-	always_ff begin
+	always_ff @(posedge CLK) begin
 		distinct_next <= distinct;
 		RegWrite_next <= RegWrite;
 	 	MemtoReg_next <= MemtoReg;
@@ -77,6 +78,7 @@ module operand_fetch #(
 	 	MemRead_next <= MemRead;
 	 	UARTtoReg_next <= UARTtoReg;
 	 	RegtoUART_next <= RegtoUART;
+		rt_next <= rt;
 	 	rd_next <= rd;
 	 	sa_next <= sa;
 	 	immediate_next <= immediate;

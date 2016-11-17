@@ -12,7 +12,7 @@ module branch(
 					end else begin
 						PCSrcs <= 2'b11;
 					end
-			2'b11 : PCSrcs <= 2'b11; //default
+			default : PCSrcs <= 2'b11; //default
 		endcase
 	end
 endmodule

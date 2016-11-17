@@ -6,10 +6,10 @@ module dist_sel(
 );
 	always_comb begin
 		case (RegDist)
-			1'b00 : rdist <= rd;
-			1'b01 : rdist <= rt;
-			1'b10 : rdist <= 5'b11111;
-			default : ;
+			2'b00 : rdist <= rd;
+			2'b01 : rdist <= rt;
+			2'b10 : rdist <= 5'b11111;
+			default : rdist <= 5'b00000;
 		endcase
 	end
 endmodule 

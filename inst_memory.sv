@@ -11,10 +11,9 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 	input logic loader_ready
 );
 	logic [31:0] inst_mem [2**INST_MEM_WIDTH-1:0] = '{
-		0: 32'h20210001,//32'hec000000, //addi r0 r0 1
-		1 : 32'h20210002,//32'h00020008,//32'hf0000000, //jr r2
-		2 : 32'h20210001,//32'h0c000000,// jal 0
-		default : 32'h20210002//32'h08000002//32'hf0000000 //j 2
+		0 : 32'hec000000,
+		1 : 32'hf0000000,
+		default : 32'h0c000000
 	};
 	logic [31:0] loader_buf;
 	logic [INST_MEM_WIDTH-1:0] loader_index;

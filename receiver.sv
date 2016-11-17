@@ -19,7 +19,7 @@ module receiver #(
 		end
 	end
 
-	always @(posedge CLK) begin
+	always_ff @(posedge CLK) begin
 		if (!{receiving, state} && !in) begin
 			state <= 4'b0001;
 		end

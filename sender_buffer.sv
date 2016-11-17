@@ -4,6 +4,7 @@ module sender_buffer #(
 	input logic CLK,
 	input logic reset,
 	input logic [31:0] data,
+	input logic start,
 	input logic enable,
 	input logic sender_ready,
 	output logic [7:0] output_data,
@@ -16,8 +17,9 @@ module sender_buffer #(
 	logic full;
 	integer state;
 	integer state2;
+	integer state3;
 
-	always @(posedge CLK) begin
+	always_ff @(posedge CLK) begin
 		if (reset) begin
 			buffer <= '{default : 0};
 			head <= 0;
@@ -25,6 +27,7 @@ module sender_buffer #(
 			full <= 0;
 			state <= 0;
 			state2 <= 0;
+			state3 <= 0;
 			valid <= 0;
 		end
 		if (head == tail && full) begin
@@ -32,7 +35,7 @@ module sender_buffer #(
 		end else begin
 			ready <= 1;
 		end
-		if (enable && state == 0) begin
+		if (enable && state == 0 && state3) begin
 			buffer[tail] <= data;
 			tail <= tail + 1;
 			state <= state + 1;
@@ -44,10 +47,14 @@ module sender_buffer #(
 			end
 			state <= 0;
 		end
-		if ((head != tail || !full) && state2 == 0) begin
+		if (start) begin
+			state3 <= state3 + 1;
+		end
+		if (((head != tail || !full) && state2 == 0) && state3) begin
 			output_data <= buffer[head][31:24];
 			valid <= 1;
 			state2 <= state2 + 1;
+			state3 <= state3 - 1;
 		end else if (state2 == 1 && sender_ready) begin
 			output_data <= buffer[head][23:16];
 			state2 <= state2 + 1;

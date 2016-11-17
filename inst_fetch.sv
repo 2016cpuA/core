@@ -22,11 +22,11 @@ module inst_fetch #(//$BA0Ds!'(Bloader_ready = input_valid$B$O0l=V$7$+>e$,$i$
 	inst_memory #(INST_MEM_WIDTH) inst_memory_instance(
 	       CLK, 
 	       reset, 
-		   distinct,
 	       pc, 
 	       loader_data, 
 	       loader_enable, 
 	       inst, 
+		   distinct,
 	       loader_ready
 	);
 
