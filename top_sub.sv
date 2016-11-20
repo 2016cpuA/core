@@ -30,8 +30,6 @@ module top_sub #(  // todo : reset system
 	logic input_ready;
 
 	//sender_buffer
-	logic sender_valid;
-	logic sender_buffer_enable;
 
 	//inst_fetch
 	logic [INST_MEM_WIDTH-1:0] pc_to_if;
@@ -211,9 +209,6 @@ module top_sub #(  // todo : reset system
 	logic [INST_MEM_WIDTH-1:0] pc_generated_from_wb;
 	logic [INST_MEM_WIDTH-1:0] pc1_next_from_wb;
 
-	//sender ans receiver
-	assign sender_buffer_enable = sender_valid | RegtoUART_to_ex;
-	
 	receiver receiver_instance (
 			CLK, 
 			UART_RX, 
@@ -239,11 +234,9 @@ module top_sub #(  // todo : reset system
 			reset, 
 			op1_sub_to_ex,
 			RegtoUART_to_ex, 
-			sender_buffer_enable, 
 			sender_ready, 
 			sender_data, 
 			sender_enable, 
-			sender_valid
 	);
 
 	//inst fetch
