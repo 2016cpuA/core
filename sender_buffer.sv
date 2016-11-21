@@ -9,7 +9,7 @@ module sender_buffer #(
 	input logic sender_ready,
 	output logic [7:0] output_data,
 	output logic valid,
-	output logic ready,
+	output logic ready
 );
 	logic [31:0] buffer [BUFFER_SIZE-1:0];
 	logic [BUFFER_SIZE-1:0] head;

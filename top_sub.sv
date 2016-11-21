@@ -229,14 +229,14 @@ module top_sub #(  // todo : reset system
 			input_data, 
 			input_ready
 	);
-	sender_buffer sender_buffer_instance (
+	sender_buffer2 sender_buffer_instance (
 			CLK, 
 			reset, 
 			op1_sub_to_ex,
 			RegtoUART_to_ex, 
 			sender_ready, 
 			sender_data, 
-			sender_enable, 
+			sender_enable
 	);
 
 	//inst fetch

@@ -1,6 +1,8 @@
 module pc_generator #(
 	parameter INST_MEM_WIDTH = 2
 )(
+	input logic CLK,
+	input logic reset,
 	input logic [1:0] PCSrcs,
 	input logic [INST_MEM_WIDTH-1:0] pc0, //JR
 	input logic [INST_MEM_WIDTH-1:0] pc1, //J, JAL
@@ -9,8 +11,10 @@ module pc_generator #(
 	input logic enable,
 	output logic [INST_MEM_WIDTH-1:0] pc
 );
-	always_comb begin
-		if (enable) begin
+	always_ff @(posedge CLK) begin
+		if (reset) begin
+			pc <= 0;
+		end else if (enable) begin
 			case (PCSrcs)
 				2'b00 : pc <= pc0;
 				2'b01 : pc <= pc1;

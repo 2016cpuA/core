@@ -36,8 +36,8 @@ module write_buffer_pc_generate #(
 	logic [INST_MEM_WIDTH-1:0] pc2_buf;
 
 	branch branch_instance(Branch_buf, alu_result_buf, PCSrcs);
-	register_write #(INST_MEM_WIDTH) register_write_instance(CLK, reset, MemtoReg, UARTtoReg, read_data, alu_result, pc, input_data, input_ready, UART_write_enable, pc_enable, data);
-	pc_generator #(INST_MEM_WIDTH) pc_generator_instance(PCSrcs, register_data_buf[INST_MEM_WIDTH-1:0], inst_index_buf[INST_MEM_WIDTH-1:0], pc2_buf, pc1_buf, pc_enable, pc_generated);
+	register_write #(INST_MEM_WIDTH) register_write_instance(CLK, reset, distinct, MemtoReg, UARTtoReg, read_data, alu_result, pc, input_data, input_ready, UART_write_enable, pc_enable, data);
+	pc_generator #(INST_MEM_WIDTH) pc_generator_instance(CLK, reset, PCSrcs, register_data_buf[INST_MEM_WIDTH-1:0], inst_index_buf[INST_MEM_WIDTH-1:0], pc2_buf, pc1_buf, pc_enable, pc_generated);
 	pc_adder #(INST_MEM_WIDTH) pc_adder_instance(pc_generated, 1, pc1_next);
 
 	always_ff @(posedge CLK) begin
