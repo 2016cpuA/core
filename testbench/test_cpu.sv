@@ -2,7 +2,7 @@
 
 module test_top #(
 	parameter INST_MEM_WIDTH = 5,
-	parameter DATA_MEM_WIDTH = 3
+	parameter DATA_MEM_WIDTH = 10
 );
     logic CLK;
 	logic UART_RX;
