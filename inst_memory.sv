@@ -10,13 +10,14 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 	output logic distinct,
 	input logic loader_ready
 );
-	logic [31:0] inst_mem [2**INST_MEM_WIDTH-1:0] = '{
-		default : 32'h08000000
-	};
+	logic [31:0] inst_mem [2**INST_MEM_WIDTH-1:0];// = '{
+//		default : 32'h08000000
+//	};
 	logic [31:0] loader_buf;
 	logic [INST_MEM_WIDTH-1:0] loader_index;
 	logic [INST_MEM_WIDTH-1:0] pc_buffer;
 	integer state;
+	integer i;
 //	logic [7:0] order_change;
 	
 //	assign order_change[0] = loader_data[7];
@@ -30,57 +31,61 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 
 //	assign order_change = loader_data;
 
-	always @(posedge CLK) begin
+	always_ff @(posedge CLK) begin
 		if (reset) begin
 			loader_index <= 0;
 			state <= 0;
 			pc_buffer <= 1; //1 ha yabai kamo
 			distinct <= 1;
-		end
-	   	inst <= inst_mem[pc];
-		if (pc != pc_buffer) begin
-			distinct <= 1;
-			pc_buffer <= pc;
+			for (i = 0;i < 2**INST_MEM_WIDTH; i = i + 1) begin
+				inst_mem[i] <= 32'h08000000;
+			end
 		end else begin
-			distinct <= 0;
-		end
-		if (state == 0) begin
-			if (loader_enable) begin
-				state <= state + 1;
-			end
-		end else if (state == 1) begin
-			if (loader_ready) begin
-				loader_buf[31:24] <= loader_data;
-				state <= state + 1;
-			end
-		end else if (state == 2) begin
-			if (loader_ready) begin
-				loader_buf[23:16] <= loader_data;
-				state <= state + 1;
-			end
-		end else if (state == 3) begin
-			if (loader_ready) begin
-				loader_buf[15:8] <= loader_data;
-				state <= state + 1;
-			end
-		end else if (state == 4) begin
-			if (loader_ready) begin
-				loader_buf[7:0] <= loader_data;
-				state <= state + 1;
-			end
-		end else if (state == 5) begin
-			inst_mem[loader_index] <= loader_buf;
-			if (loader_enable) begin
-				state <= 1;
-				loader_index <= loader_index + 1;
+	   		inst <= inst_mem[pc];
+			if (pc != pc_buffer) begin
+				distinct <= 1;
+				pc_buffer <= pc;
 			end else begin
-				state <= 0;
-				loader_index <= 0;
+				distinct <= 0;
 			end
-		end	
-		if (!loader_enable) begin
-				state <= 0;
-				loader_index <= 0;
+			if (state == 0) begin
+				if (loader_enable) begin
+					state <= state + 1;
+				end
+			end else if (state == 1) begin
+				if (loader_ready) begin
+					loader_buf[31:24] <= loader_data;
+					state <= state + 1;
+				end
+			end else if (state == 2) begin
+				if (loader_ready) begin
+					loader_buf[23:16] <= loader_data;
+					state <= state + 1;
+				end
+			end else if (state == 3) begin
+				if (loader_ready) begin
+					loader_buf[15:8] <= loader_data;
+						state <= state + 1;
+				end
+			end else if (state == 4) begin
+				if (loader_ready) begin
+					loader_buf[7:0] <= loader_data;
+					state <= state + 1;
+				end
+			end else if (state == 5) begin
+				inst_mem[loader_index] <= loader_buf;
+				if (loader_enable) begin
+					state <= 1;
+					loader_index <= loader_index + 1;
+				end else begin
+					state <= 0;
+					loader_index <= 0;
+				end
+			end	
+			if (!loader_enable) begin
+					state <= 0;
+					loader_index <= 0;
+			end
 		end
 	end
 endmodule

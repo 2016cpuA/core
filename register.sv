@@ -11,9 +11,9 @@ module register (
 	output logic [31:0] op1_sub,
 	output logic [31:0] op2_sub
 );
-	logic [31:0] r [31:0] = '{
-			default : 32'h00000000
-	};
+	logic [31:0] r [31:0];// = '{
+//			default : 32'h00000000
+//	};
 	logic buffer;
     integer i;
     
@@ -22,9 +22,9 @@ module register (
 			op1_sub <= 0;
 			op2_sub <= 0;
 			buffer <= 1;
-//			for (i = 0; i < 32; i = i + 1) begin
-//				r[i] <= 0;
-//			end
+			for (i = 0; i < 32; i = i + 1) begin
+				r[i] <= 0;
+			end
 		end else begin
 			op1_sub <= r[rs];
 			op2_sub <= r[rt];
