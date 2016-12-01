@@ -1,6 +1,8 @@
 module execution #(
 	parameter INST_MEM_WIDTH = 2
 ) (
+	input logic CLK,
+	input logic reset,
 	input logic distinct,
  	input logic RegWrite,
 	input logic [1:0] MemtoReg,
@@ -39,14 +41,74 @@ module execution #(
 );
 	logic [31:0] op1;
 	logic [31:0] op2;
+	logic [1:0] ALUSrcs_;
+	logic ALUSrcs2_;
+	logic [3:0] ALUOp_;
+	logic [1:0] RegDist_;
+	logic [31:0] op1_sub_;
+	logic [31:0] op2_sub_;
+	logic [4:0] rt_;
+	logic [4:0] rd_;
+	logic [4:0] sa_;
+	logic [15:0] immediate_;
+	logic [INST_MEM_WIDTH-1:0] pc_;
 
-	op1_sel op1_sel_instance(ALUSrcs2, op1_sub, op2_sub, op1);
-	op2_sel op2_sel_instance(ALUSrcs, op2_sub, sa, immediate, op2);
-	dist_sel dist_sel_instance(RegDist, rd, rt, rdist);
-	pc_adder #(INST_MEM_WIDTH) pc_adder2_instance(pc, immediate[INST_MEM_WIDTH-1:0], pc2);
-	alu alu_instance(ALUOp, op1, op2, alu_result);
+	op1_sel op1_sel_instance(
+			ALUSrcs2_, 
+			op1_sub_, 
+			op2_sub_, 
+			op1
+	);
+	op2_sel op2_sel_instance(
+			ALUSrcs_, 
+			op2_sub_, 
+			sa_, 
+			immediate_, 
+			op2
+	);
+	dist_sel dist_sel_instance(
+			RegDist_, 
+			rd_, 
+			rt_, 
+			rdist
+	);
+	pc_adder #(INST_MEM_WIDTH) pc_adder2_instance(
+			pc_, 
+			immediate_[INST_MEM_WIDTH-1:0], 
+			pc2
+	);
+	alu alu_instance(
+			ALUOp_, 
+			op1, 
+			op2, 
+			alu_result
+	);
 	
-	always_comb begin
+	always_ff @(posedge CLK) begin
+		if (reset) begin
+		distinct_next <= 0;
+		RegWrite_next <= 0;
+		MemtoReg_next <= 0;
+		Branch_next <= 2'b11;
+		MemWrite_next <= 0;
+		MemRead_next <= 0;
+		UARTtoReg_next <= 0;
+		register_data <= 0;
+		inst_index_next <= 0;
+		pc_next <= 0;
+		pc1_next <= 0;
+		ALUSrcs_ <= 0;
+		ALUSrcs2_ <= 0;
+		ALUOp_ <= 0;
+		RegDist_ <= 0;
+		op1_sub_ <= 0;
+		op2_sub_ <= 0;
+		rt_ <= 0;
+		rd_ <= 0;
+		sa_ <= 0;
+		immediate_ <= 0;
+		pc_ <= 0;
+		end else begin
 		distinct_next <= distinct;
 		RegWrite_next <= RegWrite;
 		MemtoReg_next <= MemtoReg;
@@ -58,6 +120,17 @@ module execution #(
 		inst_index_next <= inst_index;
 		pc_next <= pc;
 		pc1_next <= pc1;
+		ALUSrcs_ <= ALUSrcs;
+		ALUSrcs2_ <= ALUSrcs2;
+		ALUOp_ <= ALUOp;
+		RegDist_ <= RegDist;
+		op1_sub_ <= op1_sub;
+		op2_sub_ <= op2_sub;
+		rt_ <= rt;
+		rd_ <= rd;
+		sa_ <= sa;
+		immediate_ <= immediate;
+		pc_ <= pc;
 	end
 endmodule
-	
+		

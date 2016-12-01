@@ -1,6 +1,9 @@
 module inst_decode #(
 	parameter INST_MEM_WIDTH = 2
 ) (
+	input logic CLK,
+	input logic reset,
+	input logic inst_enable,
 	input logic distinct,
 	input logic [31:0] inst,
 	input logic [INST_MEM_WIDTH-1:0] pc,
@@ -28,9 +31,10 @@ module inst_decode #(
 );
 	logic [5:0] opcode;
 	logic [5:0] funct;
+	logic [31:0] inst_;
 
 	inst_decoder inst_decoder_instance(
-			inst, 
+			inst_, 
 			opcode, 
 			rs, 
 			rt, 
@@ -55,9 +59,15 @@ module inst_decode #(
 			UARTtoReg, 
 			RegtoUART
 	);
-	always_comb begin
-		distinct_next <= distinct;
-		pc_next <= pc;
-		pc1_next <= pc1;
+	always_ff @(posedge CLK) begin
+		if (reset) begin
+			inst_ <= 0;
+		end else begin
+		if (inst_enable) begin
+			distinct_next <= distinct;
+			inst_ <= inst;
+			pc_next <= pc;
+			pc1_next <= pc1;
+		end
 	end
 endmodule
