@@ -10,22 +10,21 @@ module data_memory #(
 	input logic MemRead
 );
 	logic [31:0] data_mem [2**DATA_MEM_WIDTH-1:0];
-	integer state;
-	integer i;
 
-	always @(posedge CLK) begin
+	always_ff @(posedge CLK) begin
 		if (reset) begin
-			state <= 0;
 			read_data <= 0;
-			for (i = 0;i < 2**DATA_MEM_WIDTH;i = i + 1) begin
+			for (int i = 0;i < 2**DATA_MEM_WIDTH;i = i + 1) begin
 					data_mem[i] <= 32'h00000000;
 			end
 		end
-		if (MemWrite) begin
-			data_mem[address[DATA_MEM_WIDTH-1:0]] <= write_data;
-		end;
-		if (MemRead) begin
-			read_data <= data_mem[address[DATA_MEM_WIDTH-1:0]];
+		else begin
+			if (MemWrite) begin
+				data_mem[address[DATA_MEM_WIDTH-1:0]] <= write_data;
+			end
+			if (MemRead) begin
+				read_data <= data_mem[address[DATA_MEM_WIDTH-1:0]];
+			end
 		end
 	end
 endmodule

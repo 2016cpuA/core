@@ -1,6 +1,6 @@
 module top #(  // todo : reset system
 	parameter INST_MEM_WIDTH = 2,
-	parameter DATA_MEM_WIDTH = 7
+	parameter DATA_MEM_WIDTH = 3
 ) (
 	input logic CLK_P,
 	input logic CLK_N,
