@@ -1,5 +1,5 @@
 module top #(
-	parameter INST_MEM_WIDTH = 5,  //TODO too large? For OP_JP, must be smaller than 26 bit. If smaller than 16, we must change BEQ and BNE.
+	parameter INST_MEM_WIDTH = 1,  //TODO too large? For OP_JP, must be smaller than 26 bit. If smaller than 16, we must change BEQ and BNE.
 	parameter DATA_MEM_WIDTH = 7   //TODO too large? if greater than 15, error.
 ) (
 	input logic CLK_P,

@@ -131,6 +131,7 @@ module execution #(
 		sa_ <= sa;
 		immediate_ <= immediate;
 		pc_ <= pc;
+		end
 	end
 endmodule
 		

@@ -32,7 +32,16 @@ module memory_access #(
 	output logic [INST_MEM_WIDTH-1:0] pc1_next,
 	output logic [INST_MEM_WIDTH-1:0] pc2_next
 );
-	data_memory #(DATA_MEM_WIDTH) data_memory_instance(CLK, reset, alu_result, register_data, MemWrite, read_data, MemRead);
+	data_memory #(DATA_MEM_WIDTH) data_memory_instance(
+		CLK, 
+		reset, 
+		distinct, 
+		alu_result, 
+		register_data, 
+		MemWrite, 
+		read_data, 
+		MemRead
+	);
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin

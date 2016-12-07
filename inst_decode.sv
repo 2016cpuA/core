@@ -62,12 +62,16 @@ module inst_decode #(
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 			inst_ <= 0;
+			distinct_next <= 0;
+			pc_next <= 0;
+			pc1_next <= 0;
 		end else begin
 		if (inst_enable) begin
 			distinct_next <= distinct;
 			inst_ <= inst;
 			pc_next <= pc;
 			pc1_next <= pc1;
+		end
 		end
 	end
 endmodule

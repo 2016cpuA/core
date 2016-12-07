@@ -5,7 +5,7 @@ module receiver_buffer(
 	output logic [31:0] input_data,
 	output logic ready
 );
-	integer state = 0;
+	logic [2:0] state = 0;
 	logic [31:0] buffer;
 
 	always_ff @(posedge CLK) begin

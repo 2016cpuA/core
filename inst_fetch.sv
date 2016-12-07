@@ -1,11 +1,12 @@
 module inst_fetch #(//$BA0Ds!'(Bloader_ready = input_valid$B$O0l=V$7$+>e$,$i$J$$(B
 	parameter INST_MEM_WIDTH = 2
 ) (
+//	output logic flag,
 	input logic CLK, 
 	input logic reset,
 	input logic [INST_MEM_WIDTH-1:0] pc,
 	input logic [INST_MEM_WIDTH-1:0] pc1,
-	input logic [7:0] input_data, //program loader
+	input logic [31:0] input_data, //program loader
 	input logic input_start, //program loader
 	input logic input_end, //program loader
 	input logic input_valid,//prorgram loader
@@ -13,9 +14,10 @@ module inst_fetch #(//$BA0Ds!'(Bloader_ready = input_valid$B$O0l=V$7$+>e$,$i$
 	output logic [31:0] inst,
 	output logic inst_enable,
 	output logic [INST_MEM_WIDTH-1:0] pc_next,
-	output logic [INST_MEM_WIDTH-1:0] pc1_next
+	output logic [INST_MEM_WIDTH-1:0] pc1_next,
+	output logic [7:0] led
 );
-	logic [7:0] loader_data;
+	logic [31:0] loader_data;
 	logic loader_enable;
 	logic loader_ready;
 	
@@ -25,9 +27,10 @@ module inst_fetch #(//$BA0Ds!'(Bloader_ready = input_valid$B$O0l=V$7$+>e$,$i$
 	       pc, 
 	       loader_data, 
 	       loader_enable, 
+	       loader_ready,
 	       inst, 
 		   distinct,
-	       loader_ready
+		   led
 	);
 
 	always_ff @(posedge CLK) begin
@@ -46,6 +49,7 @@ module inst_fetch #(//$BA0Ds!'(Bloader_ready = input_valid$B$O0l=V$7$+>e$,$i$
 		end else if (input_end) begin
 			loader_enable <= 0;
 			inst_enable <= 1;
+			loader_ready <= 0;
 		end else if (loader_enable) begin
 			loader_data <= input_data;
 			loader_ready <= input_valid;;

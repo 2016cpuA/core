@@ -29,4 +29,5 @@ _min_caml_start:
 	ADDI	%r3,%r0,10
 	ADDI	%r30,%r0,0
 	JAL	fibloop
+	OUT %r3
 	HALT

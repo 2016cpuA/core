@@ -1,6 +1,6 @@
 module receiver #(
-	parameter COUNT_WIDTH = 11,//4,//11,
-	parameter COUNT_MAX = 11'd1301//4'd13//11'd1301  // 300000000/115200/2 = 1302.0833333333333
+	parameter COUNT_WIDTH = 10,//4,//11,
+	parameter COUNT_MAX = 10'd541//4'd13//11'd1301  // 300000000/115200/2 = 1302.0833333333333
 ) (
 	input logic CLK,
 	input logic in,
@@ -12,14 +12,14 @@ module receiver #(
 	logic[3:0] state = 4'b0000;  /* 0001->0010->receiving->0100->1000 */
 	logic [7:0] out_sub;
 
-	assign out[0] = out_sub[7];
-	assign out[1] = out_sub[6];
-	assign out[2] = out_sub[5];
-	assign out[3] = out_sub[4];
-	assign out[4] = out_sub[3];
-	assign out[5] = out_sub[2];
-	assign out[6] = out_sub[1];
-	assign out[7] = out_sub[0];
+	assign out[0] = out_sub[0];
+	assign out[1] = out_sub[1];
+	assign out[2] = out_sub[2];
+	assign out[3] = out_sub[3];
+	assign out[4] = out_sub[4];
+	assign out[5] = out_sub[5];
+	assign out[6] = out_sub[6];
+	assign out[7] = out_sub[7];
 
 	always_comb begin
 		if (receiving && state == 4'b1111 && count_half_period == 0) begin

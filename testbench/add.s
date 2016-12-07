@@ -1,1 +1,2 @@
-ADD %r1,%r2,%r3
+IN %r1
+OUT %r1

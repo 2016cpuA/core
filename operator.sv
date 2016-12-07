@@ -66,6 +66,7 @@ module operator(
 							FUNCT_OR :  buffer <= 18'b1_10_00_1_0110_00_11_0_0_0_0;
 							FUNCT_XOR : buffer <= 18'b1_10_00_1_0111_00_11_0_0_0_0;
 							FUNCT_SLT : buffer <= 18'b1_10_00_1_1000_00_11_0_0_0_0;
+							default :  buffer <= 18'b0_00_11_1_1111_00_11_0_0_0_0;
 						endcase
 					end
 			OP_JP :    buffer <= 18'b0_10_11_1_1111_11_01_0_0_0_0;
@@ -79,6 +80,7 @@ module operator(
 			OP_SW :    buffer <= 18'b0_10_10_1_0011_11_11_1_0_0_0;
 			OP_IN :    buffer <= 18'b0_00_11_1_1111_00_11_0_0_1_0;
 			OP_OUT :   buffer <= 18'b0_00_11_1_1111_11_11_0_0_0_1;
+			default :  buffer <= 18'b0_00_11_1_1111_00_11_0_0_0_0;
 		endcase
 	end
 endmodule

@@ -71,7 +71,7 @@ module sender_buffer #(
 			end else if (state2 == 3 && sender_ready) begin
 				output_data <= buffer[head][7:0];
 				state2 <= state2 + 1;
-			end else if (state2 == 4 && sender_ready) begin
+			end else if (state2 == 4) begin
 				state2 <= 0;
 				valid <= 0;
 				head <= head + 1;

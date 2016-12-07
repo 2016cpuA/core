@@ -40,23 +40,21 @@ module sender_buffer2 (
 				output_data <= buffer[head][31:24];
 				state <= state + 1;
 				valid <= 1;
-			end else if ((state == 3) && !sender_ready) begin
-				state <= state + 1;
-			end else if ((state == 4) && sender_ready) begin
+			end else if ((state == 3) && sender_ready) begin
 				output_data <= buffer[head][23:16];
 				state <= state + 1;
-			end else if ((state == 5) && sender_ready) begin
+			end else if ((state == 4) && sender_ready) begin
 				output_data <= buffer[head][15:8];
 				state <= state + 1;
-			end else if ((state == 6) && sender_ready) begin
+			end else if ((state == 5) && sender_ready) begin
 				output_data <= buffer[head][7:0];
 				state <= state + 1;
-			end else if ((state >= 7) && (start != start_buffer)) begin
+			end else if ((state >= 6) && (start != start_buffer) && sender_ready) begin
 				state <= 0;
 				valid <= 0;
 				buffer_enable <= 0;
 				head = head + 1;
-			end else if ((state >= 7) && (start == start_buffer)) begin
+			end else if ((state >= 6) && (start == start_buffer) && sender_ready) begin
 				valid <= 0;
 				buffer_enable <= 0;
 				head = head + 1;

@@ -13,7 +13,7 @@ module test_top #(
 //	logic sw_w_6;
 //	logic [3:0] sw;
 	logic UART_TX;
-	logic [3:0] led;
+	logic [7:0] led;
 
 	top_sub #(INST_MEM_WIDTH, DATA_MEM_WIDTH) top_sub_instance(
 			CLK,
@@ -27,7 +27,7 @@ module test_top #(
 			UART_TX,
 			led
 	);
-	localparam WAIT = 2603;
+	localparam WAIT = 1084;
 	localparam CLK_ = 1;
 	always begin
 		CLK <= 1;
@@ -67,5 +67,5 @@ module test_top #(
 		sw_s_8 <= 1;
 		#WAIT;
 		sw_s_8 <= 0;
-	end	
+		end	
 endmodule
