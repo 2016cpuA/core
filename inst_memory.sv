@@ -37,7 +37,7 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 		if (reset) begin
 			loader_index <= 0;
 			state <= 0;
-			pc_buffer <= 1; //1 ha yabai kamo
+			pc_buffer <= 0; //1 ha yabai kamo
 			distinct <= 1;
 			for (i = 0;i < 2**INST_MEM_WIDTH; i = i + 1) begin
 				inst_mem[i] <= 32'h08000000;
@@ -45,6 +45,7 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 //			inst_mem[0] <= 32'hec000000;
 //			inst_mem[1] <= 32'hf0000000;
 			led <= 0;
+			inst <= inst_mem[0];
 		end else begin
 			if (state == 0) begin
 				if (pc != pc_buffer) begin
@@ -57,10 +58,10 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 				if (loader_enable) begin
 					state <= state + 1;
 				end
-//				led[0] <= inst_mem[0][31];
-//				led[1] <= inst_mem[0][30];
-//				led[2] <= inst_mem[0][29];
-//				led[3] <= inst_mem[0][28];
+				led[0] <= inst_mem[0][31];
+				led[1] <= inst_mem[0][30];
+				led[2] <= inst_mem[0][29];
+				led[3] <= inst_mem[0][28];
 				led[4] <= inst_mem[0][27];
 				led[5] <= inst_mem[0][26];
 				led[6] <= inst_mem[0][25];
@@ -75,6 +76,10 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 				led[1] <= loader_data[30];
 				led[2] <= loader_data[29];
 				led[3] <= loader_data[28];
+				led[4] <= loader_data[27];
+				led[5] <= loader_data[26];
+				led[6] <= loader_data[25];
+				led[7] <= loader_data[24];
 			end
 		end
 	end
