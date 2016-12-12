@@ -3,13 +3,12 @@
 int main(int argc, char **argv){
 		FILE *fp;
 		FILE *gp;
-		char buf[2];
+		char buf[14];
 		int i;
 		fp = fopen(argv[1], "r");
-		gp = fopen("bin__", "w");
-		while(fscanf(fp, " %s", buf) != EOF){
-			for(i=0;i<2;i++){
-				if (i == 0) fprintf(gp, "0\n");
+		gp = fopen("bin_2", "w");
+		while(fscanf(fp, " %s\n", buf) != EOF){
+			for(i=0;i<13;i++){
 				switch(buf[i]){
 					case '0':
 						fprintf(gp, "0\n0\n0\n0\n");

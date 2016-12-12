@@ -27,7 +27,7 @@ module test_top #(
 			UART_TX,
 			led
 	);
-	localparam WAIT = 1084;
+	localparam WAIT = 259;
 	localparam CLK_ = 1;
 	always begin
 		CLK <= 1;
@@ -54,6 +54,15 @@ module test_top #(
 		#WAIT;
 		#WAIT;
 		#WAIT;
+		#WAIT;
+		#WAIT;
+		sw_c_7 <= 1;
+		#WAIT;
+		sw_c_7 <= 0;
+		#WAIT;
+		sw_n_10 <= 1;
+		#WAIT;
+		sw_n_10 <= 0;
 		#WAIT;
 		fp = $fopen("/home/tansei/Documents/3a/cpuEX/cpuEX/srcs/testbench/bin__", "r");
 		if (fp!=0)begin
