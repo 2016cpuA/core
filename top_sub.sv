@@ -1,5 +1,5 @@
 module top_sub #(  // todo : reset system
-	parameter INST_MEM_WIDTH = 2,
+	parameter INST_MEM_WIDTH = 5,
 	parameter DATA_MEM_WIDTH = 3
 ) (
 	input logic CLK,
@@ -222,6 +222,7 @@ module top_sub #(  // todo : reset system
 	);
 	receiver_buffer reveiver_buffer_instance (
 			CLK, 
+			reset,
 			receiver_data, 
 			receiver_valid, 
 			input_data, 
@@ -251,8 +252,8 @@ module top_sub #(  // todo : reset system
 			inst_from_if, 
 			inst_enable_from_if, 
 			pc_next_from_if, 
-			pc1_next_from_if,
-			led
+			pc1_next_from_if
+//			led
 	);
 	
 	//inst decode
@@ -527,25 +528,18 @@ module top_sub #(  // todo : reset system
 	assign input_ready_to_wb 		= input_ready;
 	assign input_data_to_wb 		= input_data;
 	
-//	always_ff @(posedge CLK) begin
-//		if (reset) begin
-//			led[0] <= 0;
-//			led[1] <= 0;
-//			led[2] <= 0;
-//			led[3] <= 0;
-//			led[4] <= 0;
-//			led[5] <= 0;
-//			led[6] <= 0;
-//			led[7] <= 0;
-//		end else begin
-//			led[0] <= pc_to_if[0];// inst_from_if[31];
-//			led[1] <= pc_to_if[1];// inst_from_if[30];
-//			led[2] <= pc_to_if[2];// inst_from_if[29];
-//			led[3] <= pc_to_if[3];// inst_from_if[28];
-//			led[4] <= pc_to_if[4];// inst_from_if[27];
-//			led[5] <= pc_to_if[5];// inst_from_if[26];
-//			led[6] <= pc_to_if[6];// inst_from_if[25];
-//			led[7] <= pc_to_if[7];// inst_from_if[24];
-//		end
-//	end
+	always_ff @(posedge CLK) begin
+		if (reset) begin
+			led <= 8'b01010101;
+		end else begin
+			led[0] <= data_from_wb[31];
+			led[1] <= data_from_wb[30];
+			led[2] <= data_from_wb[29];
+			led[3] <= data_from_wb[28];
+			led[4] <= data_from_wb[27];
+			led[5] <= data_from_wb[26];
+			led[6] <= data_from_wb[25];
+			led[7] <= data_from_wb[24];
+		end
+	end
 endmodule

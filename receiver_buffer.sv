@@ -1,14 +1,21 @@
 module receiver_buffer(
 	input logic CLK,
+	input logic reset,
 	input logic [7:0] data,
 	input logic valid,
 	output logic [31:0] input_data,
 	output logic ready
 );
-	logic [2:0] state = 0;
+	logic [2:0] state;
 	logic [31:0] buffer;
 
 	always_ff @(posedge CLK) begin
+		if (reset) begin
+			state <= 0;
+			buffer <= 0;
+			input_data <= 0;
+			ready <= 0;
+		end else begin
 		case (state)
 			0 : begin
 					if (valid) begin
@@ -42,5 +49,6 @@ module receiver_buffer(
 					state <= 0;
 				end
 		endcase
+		end
 	end
 endmodule

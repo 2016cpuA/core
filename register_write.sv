@@ -27,13 +27,12 @@ module register_write #(
 			state <= 0;
 		end else begin
 			if ((state == 0) && (MemtoReg == 2'b01)) begin
-				if (!UARTtoReg) data <= read_data; else data <= 0;
+				if (!UARTtoReg) data <= read_data;
 			end else if ((state == 0) && (MemtoReg == 2'b10)) begin
-				if (!UARTtoReg) data <= alu_result; else data <= 0;
+				if (!UARTtoReg) data <= alu_result;
 			end else if ((state == 0) && (MemtoReg == 2'b11)) begin 
-				if (!UARTtoReg) data <= pc + 1; else data <= 0;//dataとpcの長さが違うが大丈夫か？
+				if (!UARTtoReg) data <= pc + 1;//dataとpcの長さが違うが大丈夫か？
 			end else if ((state == 0) && (UARTtoReg != UARTtoReg_buf) && UARTtoReg && !input_ready) begin
-				data <= 0;
 				state <= state + 1;
 				UARTtoReg_buf <= UARTtoReg;
 				UART_write_enable <= 0;

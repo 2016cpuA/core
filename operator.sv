@@ -52,6 +52,8 @@ module operator(
 	assign UARTtoReg = buffer[1];		//１なら入力を受け取る
 	assign RegtoUART = buffer[0];		//１なら出力する
 
+
+	//MemtoReg is OK ?
 	always_comb begin
 		case (opcode)
 			OP_SP : begin
@@ -59,7 +61,7 @@ module operator(
 							FUNCT_SLL : buffer <= 18'b1_10_01_0_0000_00_11_0_0_0_0;
 							FUNCT_SRL : buffer <= 18'b1_10_01_0_0001_00_11_0_0_0_0;
 							FUNCT_SRA : buffer <= 18'b1_10_01_0_0010_00_11_0_0_0_0;
-							FUNCT_JR :  buffer <= 18'b0_10_00_1_0011_11_00_0_0_0_0;
+							FUNCT_JR :  buffer <= 18'b0_00_00_1_0011_11_00_0_0_0_0;
 							FUNCT_ADD : buffer <= 18'b1_10_00_1_0011_00_11_0_0_0_0;
 							FUNCT_SUB : buffer <= 18'b1_10_00_1_0100_00_11_0_0_0_0;
 							FUNCT_AND : buffer <= 18'b1_10_00_1_0101_00_11_0_0_0_0;
@@ -69,10 +71,10 @@ module operator(
 							default :  buffer <= 18'b0_00_11_1_1111_00_11_0_0_0_0;
 						endcase
 					end
-			OP_JP :    buffer <= 18'b0_10_11_1_1111_11_01_0_0_0_0;
+			OP_JP :    buffer <= 18'b0_00_11_1_1111_11_01_0_0_0_0;
 			OP_JAL :   buffer <= 18'b1_11_11_1_1111_10_01_0_0_0_0;
-			OP_BEQ :   buffer <= 18'b0_10_00_1_1001_00_10_0_0_0_0;
-			OP_BNE :   buffer <= 18'b0_10_00_1_1010_00_10_0_0_0_0;
+			OP_BEQ :   buffer <= 18'b0_00_00_1_1001_00_10_0_0_0_0;
+			OP_BNE :   buffer <= 18'b0_00_00_1_1010_00_10_0_0_0_0;
 			OP_ADDI :  buffer <= 18'b1_10_10_1_0011_01_11_0_0_0_0;
 			OP_ANDI :  buffer <= 18'b1_10_10_1_0101_01_11_0_0_0_0;
 			OP_ORI :   buffer <= 18'b1_10_10_1_0110_01_11_0_0_0_0;

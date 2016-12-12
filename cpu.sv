@@ -12,9 +12,17 @@ module top #(  // todo : reset system
 	output logic [7:0] led
 );
 	//clk generate
+	logic CLK_in;
 	logic CLK;
-	IBUFGDS IBUBFGDS_instance(.I(CLK_P), .IB(CLK_N), .O(CLK));
+	logic locked;
+	IBUFGDS IBUBFGDS_instance(.I(CLK_P), .IB(CLK_N), .O(CLK_in));
 	
+	clk_wiz_0 clk_wiz_0_instance(
+		.CLK_in(CLK_in),
+		.CLK(CLK),
+		.reset(1'b0),
+		.locked(locked)
+	);
 	top_sub #(INST_MEM_WIDTH, DATA_MEM_WIDTH) top_sub_instance(
 			CLK,
 			UART_RX,
