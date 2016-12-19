@@ -26,7 +26,7 @@ fibloop:
 	LW	%r31,4(%r30)
 	JR	%r31
 _min_caml_start:
-	ADDI	%r3,%r0,10
+	ADDI	%r3,%r0,20
 	ADDI	%r30,%r0,0
 	JAL	fibloop
 	OUT %r3

@@ -1,6 +1,5 @@
 module memory_access #(
-	parameter INST_MEM_WIDTH = 2,
-	parameter DATA_MEM_WIDTH = 3
+	parameter INST_MEM_WIDTH = 2
 ) (
 	input logic CLK,
 	input logic reset,
@@ -32,7 +31,9 @@ module memory_access #(
 	output logic [INST_MEM_WIDTH-1:0] pc1_next,
 	output logic [INST_MEM_WIDTH-1:0] pc2_next
 );
-	data_memory #(DATA_MEM_WIDTH) data_memory_instance(
+	logic [1:0] state;
+
+	data_memory data_memory_instance(
 		CLK, 
 		reset, 
 		distinct, 
@@ -57,19 +58,27 @@ module memory_access #(
 			pc_next <= 0;
 			pc1_next <= 0;
 			pc2_next <= 0;
+			state <= 0;
 		end else begin
-			distinct_next <= distinct;
-			RegWrite_next <= RegWrite;
-			MemtoReg_next <= MemtoReg;
-			Branch_next <= Branch;
-			UARTtoReg_next <= UARTtoReg;
-			register_data_next <= register_data;
-			alu_result_next <= alu_result;
-			rdist_next <= rdist;
-			inst_index_next <= inst_index;
-			pc_next <= pc;
-			pc1_next <= pc1;
-			pc2_next <= pc2;
+			if (state == 0) begin
+				state <= state + 1;
+			end else if (state == 1) begin
+				state <= state + 1;
+			end else begin
+				state <= 0;
+				distinct_next <= distinct;
+				RegWrite_next <= RegWrite;
+				MemtoReg_next <= MemtoReg;
+				Branch_next <= Branch;
+				UARTtoReg_next <= UARTtoReg;
+				register_data_next <= register_data;
+				alu_result_next <= alu_result;
+				rdist_next <= rdist;
+				inst_index_next <= inst_index;
+				pc_next <= pc;
+				pc1_next <= pc1;
+				pc2_next <= pc2;
+			end
 		end
 	end
 endmodule

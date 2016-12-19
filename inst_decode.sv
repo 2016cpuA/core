@@ -32,6 +32,7 @@ module inst_decode #(
 	logic [5:0] opcode;
 	logic [5:0] funct;
 	logic [31:0] inst_;
+	logic [1:0] state;
 
 	inst_decoder inst_decoder_instance(
 			inst_, 
@@ -65,13 +66,19 @@ module inst_decode #(
 			distinct_next <= 0;
 			pc_next <= 0;
 			pc1_next <= 0;
+			state <= 0;
 		end else begin
-		if (inst_enable) begin
-			distinct_next <= distinct;
-			inst_ <= inst;
-			pc_next <= pc;
-			pc1_next <= pc1;
-		end
+			if (inst_enable && state == 0) begin
+				state <= state + 1;
+			end	else if(state == 1) begin
+				state <= state + 1;
+			end else begin
+				distinct_next <= distinct;
+				pc_next <= pc;
+				pc1_next <= pc1;
+				inst_ <= inst;
+				state <= 0;
+			end
 		end
 	end
 endmodule

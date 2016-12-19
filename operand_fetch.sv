@@ -5,12 +5,14 @@ module operand_fetch #(
 	input logic reset,
 	input logic distinct,
 	input logic distinct_before,
+	input logic AorF_before,
 	input logic RegWrite_before,
 	input logic UART_write_enable,
 	input logic [4:0] rs,
 	input logic [4:0] rt,
 	input logic [4:0] rw,
 	input logic [31:0] write_data,
+	input logic AorF,
  	input logic RegWrite,
 	input logic [1:0] MemtoReg,
 	input logic [1:0] ALUSrcs,
@@ -31,6 +33,7 @@ module operand_fetch #(
 	output logic distinct_next,
 	output logic [31:0] op1_sub,
 	output logic [31:0] op2_sub,
+	output logic AorF_next,
 	output logic RegWrite_next,
 	output logic [1:0] MemtoReg_next,
 	output logic [1:0] ALUSrcs_next,
@@ -55,6 +58,8 @@ module operand_fetch #(
 			CLK,
 			reset,
 			distinct_before,
+			AorF,
+			AorF_before,
 			RegWrite_before,
 			UART_write_enable,
 			rs,
@@ -67,6 +72,7 @@ module operand_fetch #(
 
 	always_ff @(posedge CLK) begin
 		distinct_next <= distinct;
+		AorF_next <= AorF;
 		RegWrite_next <= RegWrite;
 	 	MemtoReg_next <= MemtoReg;
 	 	ALUSrcs_next <= ALUSrcs;

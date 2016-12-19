@@ -1,6 +1,5 @@
 module top_sub #(  // todo : reset system
-	parameter INST_MEM_WIDTH = 5,
-	parameter DATA_MEM_WIDTH = 3
+	parameter INST_MEM_WIDTH = 5
 ) (
 	input logic CLK,
 	input logic UART_RX,
@@ -31,10 +30,8 @@ module top_sub #(  // todo : reset system
 	//inst_fetch
 	logic [INST_MEM_WIDTH-1:0] pc_to_if;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_if;
-	logic [31:0] input_data_to_if;
 	logic input_start_to_if;
 	logic input_end_to_if;
-	logic input_valid_to_if;
 	logic distinct_from_if;
 	logic [31:0] inst_from_if;
 	logic inst_enable_from_if;
@@ -244,10 +241,8 @@ module top_sub #(  // todo : reset system
 			reset, 
 			pc_to_if, 
 			pc1_to_if, 
-			input_data_to_if, 
 			input_start_to_if, 
 			input_end_to_if, 
-			input_valid_to_if,
 			distinct_from_if,
 			inst_from_if, 
 			inst_enable_from_if, 
@@ -266,6 +261,7 @@ module top_sub #(  // todo : reset system
 			pc_to_id, 
 			pc1_to_id, 
 			distinct_next_from_id,
+			AorF_from_id,
 			RegWrite_from_id, 
 			MemtoReg_from_id, 
 			ALUSrcs_from_id, 
@@ -293,12 +289,14 @@ module top_sub #(  // todo : reset system
 			reset,
 			distinct_to_op,
 			distinct_before_to_op,
+			AorF_before_to_op,
 			RegWrite_before_to_op,
 			UART_write_enable_to_op,
 			rs_to_op,
 			rt_to_op,
 			rw_to_op,
 			write_data_to_op,
+			AorF_to_op,
  			RegWrite_to_op,
 			MemtoReg_to_op,
 			ALUSrcs_to_op,
@@ -319,6 +317,7 @@ module top_sub #(  // todo : reset system
 			distinct_next_from_op,
 			op1_sub_from_op,
 			op2_sub_from_op,
+			AorF_next_from_op,
 			RegWrite_next_from_op,
 			MemtoReg_next_from_op,
 			ALUSrcs_next_from_op,
@@ -381,7 +380,7 @@ module top_sub #(  // todo : reset system
 	);
 
 	//memory access
-	memory_access #(INST_MEM_WIDTH, DATA_MEM_WIDTH) memory_access_instance(
+	memory_access #(INST_MEM_WIDTH) memory_access_instance(
 			CLK, 
 			reset, 
 			distinct_to_mem,
@@ -443,10 +442,8 @@ module top_sub #(  // todo : reset system
 
 	assign pc_to_if 				= pc_generated_from_wb;
 	assign pc1_to_if 				= pc1_next_from_wb;
-	assign input_data_to_if 	   	= input_data;
 	assign input_start_to_if 	   	= sw_n_10;
 	assign input_end_to_if 		   	= sw_s_8;
-	assign input_valid_to_if 	   	= input_ready;
 	assign inst_enable_to_id		= inst_enable_from_if;
 	assign distinct_to_id			= distinct_from_if;
 	assign inst_to_id				= inst_from_if;

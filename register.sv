@@ -2,6 +2,8 @@ module register (
 	input logic CLK,
 	input logic reset,
 	input logic distinct,
+	input logic AorF,
+	input logic AorF_before,
 	input logic RegWrite,
 	input logic UART_write_enable,
 	input logic [4:0] rs,
@@ -11,9 +13,8 @@ module register (
 	output logic [31:0] op1_sub,
 	output logic [31:0] op2_sub
 );
-	logic [31:0] r [31:0];// = '{
-//			default : 32'h00000000
-//	};
+	logic [31:0] r [31:0];
+	logic [31:0] f [31:0];
 	logic buffer;
     integer i;
     
@@ -24,12 +25,22 @@ module register (
 			buffer <= 1;
 			for (i = 0; i < 32; i = i + 1) begin
 				r[i] <= 0;
+				f[i] <= 0;
 			end
 		end else begin
-			op1_sub <= r[rs];
-			op2_sub <= r[rt];
+			if (AorF) begin
+				op1_sub <= f[rs];
+				op2_sub <= f[rt];
+			end else begin
+				op1_sub <= r[rs];
+				op2_sub <= r[rt];
+			end
 			if ((RegWrite || UART_write_enable) && (distinct != buffer)) begin
-				r[rw] <= write_data;
+				if (AorF_before) begin
+					f[rw] <= write_data;
+				end else begin
+					r[rw] <= write_data;
+				end
 				buffer <= distinct;
 			end
 		end

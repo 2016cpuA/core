@@ -1,6 +1,7 @@
 module operator(
 	input logic [5:0] opcode,
 	input logic [5:0] funct,
+	output logic AorF,
 	output logic RegWrite,
 	output logic [1:0] MemtoReg,
 	output logic [1:0] ALUSrcs,
@@ -26,7 +27,9 @@ module operator(
 	localparam OP_SW   = 6'b101011;
 	localparam OP_IN   = 6'b111011;
 	localparam OP_OUT  = 6'b111100;
-	localparam OP_LW_I = 6'b111110; //デバッグ用命令。
+	localparam OP_FPU  = 6'b010001;
+	localparam OP_SWC  = 6'b111001;
+	localparam OP_LWC  = 6'b110001;
 	
 	localparam FUNCT_SLL = 6'b000000;
 	localparam FUNCT_SRL = 6'b000010;
@@ -38,8 +41,17 @@ module operator(
 	localparam FUNCT_OR  = 6'b100101;
 	localparam FUNCT_XOR = 6'b100110;
 	localparam FUNCT_SLT = 6'b101010;
+	
+	localparam FMT_ADD = 6'b000000;
+	localparam FMT_SUB = 6'b000001;
+	localparam FMT_MUL = 6'b000010;
+	localparam FMT_DIV = 6'b000011;
+	localparam FMT_CEQ = 6'b111100; 
+	localparam FMT_CLE = 6'b111101; 
+	localparam FMT_CLT = 6'b111110; 
 
-	logic [17:0] buffer;
+	logic [18:0] buffer;
+	assign AorF		 = buffer[18];		//0ならalu、1ならfpu
 	assign RegWrite  = buffer[17];		//１ならregidsterにかきこむ
 	assign MemtoReg  = buffer[16:15];	//registerに書き込むデータを選択。01:memoryからのデータ。10:aluの計算結果。11:pc(JALの時のリンクレジスタへ)
 	assign ALUSrcs   = buffer[14:13];	//op2の選択。00:reg[rt]。01:sa。10:immediate。11:使わない
@@ -58,30 +70,44 @@ module operator(
 		case (opcode)
 			OP_SP : begin
 						case (funct)
-							FUNCT_SLL : buffer <= 18'b1_10_01_0_0000_00_11_0_0_0_0;
-							FUNCT_SRL : buffer <= 18'b1_10_01_0_0001_00_11_0_0_0_0;
-							FUNCT_SRA : buffer <= 18'b1_10_01_0_0010_00_11_0_0_0_0;
-							FUNCT_JR :  buffer <= 18'b0_00_00_1_0011_11_00_0_0_0_0;
-							FUNCT_ADD : buffer <= 18'b1_10_00_1_0011_00_11_0_0_0_0;
-							FUNCT_SUB : buffer <= 18'b1_10_00_1_0100_00_11_0_0_0_0;
-							FUNCT_AND : buffer <= 18'b1_10_00_1_0101_00_11_0_0_0_0;
-							FUNCT_OR :  buffer <= 18'b1_10_00_1_0110_00_11_0_0_0_0;
-							FUNCT_XOR : buffer <= 18'b1_10_00_1_0111_00_11_0_0_0_0;
-							FUNCT_SLT : buffer <= 18'b1_10_00_1_1000_00_11_0_0_0_0;
-							default :  buffer <= 18'b0_00_11_1_1111_00_11_0_0_0_0;
+							FUNCT_SLL : buffer <= 18'b0_1_10_01_0_0000_00_11_0_0_0_0;
+							FUNCT_SRL : buffer <= 18'b0_1_10_01_0_0001_00_11_0_0_0_0;
+							FUNCT_SRA : buffer <= 18'b0_1_10_01_0_0010_00_11_0_0_0_0;
+							FUNCT_JR :  buffer <= 18'b0_0_00_00_1_0011_11_00_0_0_0_0;
+							FUNCT_ADD : buffer <= 18'b0_1_10_00_1_0011_00_11_0_0_0_0;
+							FUNCT_SUB : buffer <= 18'b0_1_10_00_1_0100_00_11_0_0_0_0;
+							FUNCT_AND : buffer <= 18'b0_1_10_00_1_0101_00_11_0_0_0_0;
+							FUNCT_OR :  buffer <= 18'b0_1_10_00_1_0110_00_11_0_0_0_0;
+							FUNCT_XOR : buffer <= 18'b0_1_10_00_1_0111_00_11_0_0_0_0;
+							FUNCT_SLT : buffer <= 18'b0_1_10_00_1_1000_00_11_0_0_0_0;
+							default :  buffer <= 18'b0_0_00_11_1_1111_00_11_0_0_0_0;
 						endcase
 					end
-			OP_JP :    buffer <= 18'b0_00_11_1_1111_11_01_0_0_0_0;
-			OP_JAL :   buffer <= 18'b1_11_11_1_1111_10_01_0_0_0_0;
-			OP_BEQ :   buffer <= 18'b0_00_00_1_1001_00_10_0_0_0_0;
-			OP_BNE :   buffer <= 18'b0_00_00_1_1010_00_10_0_0_0_0;
-			OP_ADDI :  buffer <= 18'b1_10_10_1_0011_01_11_0_0_0_0;
-			OP_ANDI :  buffer <= 18'b1_10_10_1_0101_01_11_0_0_0_0;
-			OP_ORI :   buffer <= 18'b1_10_10_1_0110_01_11_0_0_0_0;
-			OP_LW :    buffer <= 18'b1_01_10_1_0011_01_11_0_1_0_0;
-			OP_SW :    buffer <= 18'b0_10_10_1_0011_11_11_1_0_0_0;
-			OP_IN :    buffer <= 18'b0_00_11_1_1111_00_11_0_0_1_0;
-			OP_OUT :   buffer <= 18'b0_00_11_1_1111_11_11_0_0_0_1;
+			OP_JP :    buffer <= 18'b0_0_00_11_1_1111_11_01_0_0_0_0;
+			OP_JAL :   buffer <= 18'b0_1_11_11_1_1111_10_01_0_0_0_0;
+			OP_BEQ :   buffer <= 18'b0_0_00_00_1_1001_00_10_0_0_0_0;
+			OP_BNE :   buffer <= 18'b0_0_00_00_1_1010_00_10_0_0_0_0;
+			OP_ADDI :  buffer <= 18'b0_1_10_10_1_0011_01_11_0_0_0_0;
+			OP_ANDI :  buffer <= 18'b0_1_10_10_1_0101_01_11_0_0_0_0;
+			OP_ORI :   buffer <= 18'b0_1_10_10_1_0110_01_11_0_0_0_0;
+			OP_LW :    buffer <= 18'b0_1_01_10_1_0011_01_11_0_1_0_0;
+			OP_SW :    buffer <= 18'b0_0_10_10_1_0011_11_11_1_0_0_0;
+			OP_IN :    buffer <= 18'b0_0_00_11_1_1111_00_11_0_0_1_0;
+			OP_OUT :   buffer <= 18'b0_0_00_11_1_1111_11_11_0_0_0_1;
+			OP_FPU : begin
+						case (funct)
+							FMT_ADD : buffer <= 18'b1_1_10_00_1_0011_00_11_0_0_0_0;
+							FMT_SUB : buffer <= 18'b1_1_10_00_1_0100_00_11_0_0_0_0;
+							FMT_MUL : buffer <= 18'b1_1_10_00_1_1110_00_11_0_0_0_0;
+							FMT_DIV : buffer <= 18'b1_1_10_00_1_1101_00_11_0_0_0_0;
+							FMT_CEQ : buffer <= 18'b1_1_10_00_1_1100_00_11_0_0_0_0;
+							FMT_CLE : buffer <= 18'b1_1_10_00_1_1011_00_11_0_0_0_0;
+							FMT_CLT : buffer <= 18'b1_1_10_00_1_1010_00_11_0_0_0_0;
+							default : buffer <= 18'b1_0_00_11_1_1111_00_11_0_0_0_0;
+						endcase
+					end
+			OP_SWC : buffer <= 18'b1_0_10_10_1_0011_11_11_1_0_0_0;
+			OP_LWC  :buffer <= 18'b1_1_01_10_1_0011_01_11_0_1_0_0;
 			default :  buffer <= 18'b0_00_11_1_1111_00_11_0_0_0_0;
 		endcase
 	end

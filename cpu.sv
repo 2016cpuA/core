@@ -1,6 +1,5 @@
 module top #(  // todo : reset system
-	parameter INST_MEM_WIDTH = 5,
-	parameter DATA_MEM_WIDTH = 7
+	parameter INST_MEM_WIDTH = 5
 ) (
 	input logic CLK_P,
 	input logic CLK_N,
@@ -23,7 +22,7 @@ module top #(  // todo : reset system
 		.reset(1'b0),
 		.locked(locked)
 	);
-	top_sub #(INST_MEM_WIDTH, DATA_MEM_WIDTH) top_sub_instance(
+	top_sub #(INST_MEM_WIDTH) top_sub_instance(
 			CLK,
 			UART_RX,
 			sw_n_10,

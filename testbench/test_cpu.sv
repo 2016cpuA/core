@@ -47,34 +47,5 @@ module test_top #(
 		sw_c_7 <= 1;
 		#WAIT;
 		sw_c_7 <= 0;
-		#WAIT;
-		sw_n_10 <= 1;
-		#WAIT;
-		sw_n_10 <= 0;
-		#WAIT;
-		#WAIT;
-		#WAIT;
-		#WAIT;
-		#WAIT;
-		sw_c_7 <= 1;
-		#WAIT;
-		sw_c_7 <= 0;
-		#WAIT;
-		sw_n_10 <= 1;
-		#WAIT;
-		sw_n_10 <= 0;
-		#WAIT;
-		fp = $fopen("/home/tansei/Documents/3a/cpuEX/cpuEX/srcs/testbench/bin__", "r");
-		if (fp!=0)begin
-			while(!$feof(fp))begin
-				status = $fscanf(fp, "%1b\n", buffer);
-				$display(buffer);
-				UART_RX <= buffer;
-				#WAIT;
-			end
-		end
-		sw_s_8 <= 1;
-		#WAIT;
-		sw_s_8 <= 0;
 		end	
 endmodule
