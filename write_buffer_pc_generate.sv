@@ -4,6 +4,7 @@ module write_buffer_pc_generate #(
 	input logic CLK,
 	input logic reset,
 	input logic distinct,
+	input logic AorF,
 	input logic RegWrite,
 	input logic [1:0] MemtoReg,
 	input logic [1:0] Branch,
@@ -19,6 +20,7 @@ module write_buffer_pc_generate #(
 	input logic input_ready,
 	input logic [31:0] input_data,
 	output logic distinct_next,
+	output logic AorF_next,
 	output logic RegWrite_next,
 	output logic UART_write_enable,
 	output logic [31:0] data,
@@ -75,6 +77,7 @@ module write_buffer_pc_generate #(
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 			distinct_next <= 0;
+			AorF_next <= 0;
 			RegWrite_next <= 0;
 			Branch_buf <= 2'b11;
 			register_data_buf <= 0;
@@ -85,6 +88,7 @@ module write_buffer_pc_generate #(
 			pc2_buf <= 0;
 		end else begin
 			distinct_next <= distinct;
+			AorF_next <= AorF;
 			RegWrite_next <= RegWrite;
 			Branch_buf <= Branch;
 			register_data_buf <= register_data;

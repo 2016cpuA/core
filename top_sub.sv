@@ -115,6 +115,7 @@ module top_sub #(  // todo : reset system
 
 	//execution
 	logic distinct_to_ex;
+	logic AorF_to_ex;
 	logic RegWrite_to_ex;
 	logic [1:0] MemtoReg_to_ex;
 	logic [1:0] ALUSrcs_to_ex;
@@ -136,6 +137,7 @@ module top_sub #(  // todo : reset system
 	logic [INST_MEM_WIDTH-1:0] pc_to_ex;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_ex;
 	logic distinct_next_from_ex;
+	logic AorF_next_from_ex;
  	logic RegWrite_next_from_ex;
 	logic [1:0] MemtoReg_next_from_ex;
 	logic [1:0] Branch_next_from_ex;
@@ -144,6 +146,7 @@ module top_sub #(  // todo : reset system
 	logic UARTtoReg_next_from_ex;
 	logic [31:0] register_data_from_ex;
 	logic [31:0] alu_result_from_ex;
+	logic valid_from_ex;
 	logic [4:0] rdist_from_ex;
 	logic [25:0] inst_index_next_from_ex;
 	logic [INST_MEM_WIDTH-1:0] pc_next_from_ex;
@@ -152,6 +155,7 @@ module top_sub #(  // todo : reset system
 
 	//memory_access
 	logic distinct_to_mem;
+	logic AorF_to_mem;
  	logic RegWrite_to_mem;
 	logic [1:0] MemtoReg_to_mem;
 	logic [1:0] Branch_to_mem;
@@ -160,12 +164,14 @@ module top_sub #(  // todo : reset system
 	logic UARTtoReg_to_mem;
 	logic [31:0] register_data_to_mem;
 	logic [31:0] alu_result_to_mem;
+	logic valid_to_mem;
 	logic [4:0] rdist_to_mem;
 	logic [25:0] inst_index_to_mem;
 	logic [INST_MEM_WIDTH-1:0] pc_to_mem;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_mem;
 	logic [INST_MEM_WIDTH-1:0] pc2_to_mem;
 	logic distinct_next_from_mem;
+	logic Aorf_next_from_mem;
  	logic RegWrite_next_from_mem;
 	logic [1:0] MemtoReg_next_from_mem;
 	logic [1:0] Branch_next_from_mem;
@@ -343,6 +349,7 @@ module top_sub #(  // todo : reset system
 			CLK,
 			reset,
 			distinct_to_ex,
+			AorF_to_ex,
 			RegWrite_to_ex, 
 			MemtoReg_to_ex, 
 			ALUSrcs_to_ex, 
@@ -364,6 +371,7 @@ module top_sub #(  // todo : reset system
 			pc_to_ex, 
 			pc1_to_ex, 
 			distinct_next_from_ex,
+			AorF_next_from_ex,
 			RegWrite_next_from_ex, 
 			MemtoReg_next_from_ex, 
 			Branch_next_from_ex, 
@@ -372,6 +380,7 @@ module top_sub #(  // todo : reset system
 			UARTtoReg_next_from_ex, 
 			register_data_from_ex, 
 			alu_result_from_ex, 
+			valid_from_ex,
 			rdist_from_ex, 
 			inst_index_next_from_ex, 
 			pc_next_from_ex, 
@@ -384,6 +393,7 @@ module top_sub #(  // todo : reset system
 			CLK, 
 			reset, 
 			distinct_to_mem,
+			AorF_to_mem,
 			RegWrite_to_mem, 
 			MemtoReg_to_mem, 
 			Branch_to_mem, 
@@ -398,6 +408,7 @@ module top_sub #(  // todo : reset system
 			pc1_to_mem, 
 			pc2_to_mem, 
 			distinct_next_from_mem,
+			AorF_next_from_mem,
 			RegWrite_next_from_mem, 
 			MemtoReg_next_from_mem, 
 			Branch_next_from_mem, 
@@ -417,6 +428,7 @@ module top_sub #(  // todo : reset system
 			CLK,
 			reset,
 			distinct_to_wb,
+			AorF_to_wb,
 			RegWrite_to_wb, 
 			MemtoReg_to_wb, 
 			Branch_to_wb, 
@@ -432,6 +444,7 @@ module top_sub #(  // todo : reset system
 			input_ready_to_wb, 
 			input_data_to_wb, 
 			distinct_next_from_wb,
+			AorF_next_from_wb,
 			RegWrite_next_from_wb, 
 			UART_write_enable_from_wb, 
 			data_from_wb, 
@@ -496,6 +509,7 @@ module top_sub #(  // todo : reset system
 	assign pc_to_ex 				= pc_next_from_op;
 	assign pc1_to_ex 				= pc1_next_from_op;
 	assign distinct_to_mem			= distinct_next_from_ex;
+	assign AorF_to_mem 				= AorF_next_from_ex;
 	assign RegWrite_to_mem 			= RegWrite_next_from_ex;
 	assign MemtoReg_to_mem 			= MemtoReg_next_from_ex;
 	assign Branch_to_mem 			= Branch_next_from_ex;
@@ -504,6 +518,7 @@ module top_sub #(  // todo : reset system
 	assign UARTtoReg_to_mem 		= UARTtoReg_next_from_ex;
 	assign register_data_to_mem 	= register_data_from_ex;
 	assign alu_result_to_mem 		= alu_result_from_ex;
+	assign valid_to_mem 			= valid_from_ex;
 	assign rdist_to_mem 			= rdist_from_ex;
 	assign inst_index_to_mem 		= inst_index_next_from_ex;
 	assign pc_to_mem 				= pc_next_from_ex;

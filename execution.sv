@@ -36,6 +36,7 @@ module execution #(
 	output logic UARTtoReg_next,
 	output logic [31:0] register_data,
 	output logic [31:0] result,
+	output logic valid,
 	output logic [4:0] rdist,
 	output logic [25:0] inst_index_next,
 	output logic [INST_MEM_WIDTH-1:0] pc_next,
@@ -44,6 +45,7 @@ module execution #(
 );
 	logic [31:0] op1;
 	logic [31:0] op2;
+	logic AorF_;
 	logic [1:0] ALUSrcs_;
 	logic ALUSrcs2_;
 	logic [3:0] ALUOp_;
@@ -57,7 +59,8 @@ module execution #(
 	logic [INST_MEM_WIDTH-1:0] pc_;
 	logic [31:0] alu_result;
 	logic [31:0] fpu_result;
-	logic [1:0] state;
+	logic fpu_valid;
+	logic state;
 
 	op1_sel op1_sel_instance(
 			ALUSrcs2_, 
@@ -91,10 +94,13 @@ module execution #(
 	);
 	fpu fpu_instance(
 			CLK,
+			reset,
+			AorF_,
 			ALUOp_,
 			op1,
 			op2,
-			fpu_result
+			fpu_result,
+			fpu_valid
 	);
 
 	always_ff @(posedge CLK) begin
@@ -112,6 +118,7 @@ module execution #(
 		inst_index_next <= 0;
 		pc_next <= 0;
 		pc1_next <= 0;
+		AorF_ <= 0;
 		ALUSrcs_ <= 0;
 		ALUSrcs2_ <= 0;
 		ALUOp_ <= 0;
@@ -124,6 +131,8 @@ module execution #(
 		immediate_ <= 0;
 		pc_ <= 0;
 		state <= 0;
+		result <= 0;
+		valid <= 0;
 		end else begin
 		if (! AorF && state ==  0) begin
 		distinct_next <= distinct;
@@ -139,6 +148,7 @@ module execution #(
 		inst_index_next <= inst_index;
 		pc_next <= pc;
 		pc1_next <= pc1;
+		AorF_ <= AorF;
 		ALUSrcs_ <= ALUSrcs;
 		ALUSrcs2_ <= ALUSrcs2;
 		ALUOp_ <= ALUOp;
@@ -151,7 +161,13 @@ module execution #(
 		immediate_ <= immediate;
 		pc_ <= pc;
 		result <= alu_result;
+		valid <= 1;
 		end else if (state == 0) begin
+			if (MemWrite || MemRead) begin	
+				AorF_ <= 0;
+			end else begin
+				AorF_ <= 1;
+			end
 			ALUSrcs_ <= ALUSrcs;
 			ALUSrcs2_ <= ALUSrcs2;
 			ALUOp_ <= ALUOp;
@@ -164,11 +180,8 @@ module execution #(
 			immediate_ <= immediate;
 			pc_ <= pc;	
 			state <= state + 1;
-		end else if (state == 1) begin
-			state <= state + 1;
-		end else if (state == 2) begin
-			state <= state + 1;
-		end else if (state == 3) begin
+			valid <= 0;
+		end else if (state == 1 && fpu_valid) begin
 			distinct_next <= distinct;
 			AorF_next <= AorF;
 			ALUOp_next <= ALUOp;
@@ -183,7 +196,8 @@ module execution #(
 			pc_next <= pc;
 			pc1_next <= pc1;
 			result <= fpu_result;
-			state <= 0
+			valid <= 1;
+			state <= 0;
 		end
 	end
 endmodule
