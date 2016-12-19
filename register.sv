@@ -23,10 +23,12 @@ module register (
 			op1_sub <= 0;
 			op2_sub <= 0;
 			buffer <= 1;
-			for (i = 0; i < 32; i = i + 1) begin
+			for (i = 1; i < 32; i = i + 1) begin
 				r[i] <= 0;
 				f[i] <= 0;
 			end
+			r[0] <= 1;
+			f[0] <= 2;
 		end else begin
 			if (AorF) begin
 				op1_sub <= f[rs];

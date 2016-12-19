@@ -9,6 +9,7 @@ module inst_decode #(
 	input logic [INST_MEM_WIDTH-1:0] pc,
 	input logic [INST_MEM_WIDTH-1:0] pc1,
 	output logic distinct_next,
+	output logic AorF,
  	output logic RegWrite,
 	output logic [1:0] MemtoReg,
 	output logic [1:0] ALUSrcs,
@@ -48,6 +49,7 @@ module inst_decode #(
 	operator operator_instamce(
 			opcode, 
 			funct, 
+			AorF,
 			RegWrite, 
 			MemtoReg, 
 			ALUSrcs, 

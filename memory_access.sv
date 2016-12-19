@@ -50,7 +50,7 @@ module memory_access #(
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 			distinct_next <= 1;
-			Aorf_next <= 0;
+			AorF_next <= 0;
 			RegWrite_next <= 0;
 			MemtoReg_next <= 2'b00;
 			Branch_next <= 2'b00;
@@ -64,7 +64,7 @@ module memory_access #(
 			pc2_next <= 0;
 			state <= 0;
 		end else begin
-			if (state == 0 %% valid) begin
+			if (state == 0 && valid) begin
 				state <= state + 1;
 			end else if (state == 1) begin
 				state <= state + 1;

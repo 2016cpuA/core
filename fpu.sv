@@ -6,12 +6,18 @@ module fpu (
 	input logic [31:0] op1,
 	input logic [31:0] op2,
 	output logic [31:0] fpu_result,
-	output logic fpu_valid;
+	output logic fpu_valid
 );
 	logic [1:0] state;
 	logic [31:0] op1_;
 	logic [31:0] op2_;
-	logic [31:0] [6:0] result_;
+	logic [31:0] result_0;
+	logic [31:0] result_1;
+	logic [31:0] result_2;
+	logic [31:0] result_3;
+	logic [7:0] result_4;
+	logic [7:0] result_5;
+	logic [7:0] result_6;
 	logic [6:0] ready_a;
 	logic [6:0] ready_b;
 	logic ready_r;
@@ -28,7 +34,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[0]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
-		.m_axis_result_tdata(result_[0]),
+		.m_axis_result_tdata(result_0),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[0])
 	);
@@ -41,7 +47,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[1]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
-		.m_axis_result_tdata(result_[1]),
+		.m_axis_result_tdata(result_1),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[1])
 	);
@@ -54,7 +60,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[2]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
-		.m_axis_result_tdata(result_[2]),
+		.m_axis_result_tdata(result_2),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[2])
 	);
@@ -68,7 +74,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[3]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
-		.m_axis_result_tdata(result_[3]),
+		.m_axis_result_tdata(result_3),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[3])
 	);
@@ -81,7 +87,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[4]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
-		.m_axis_result_tdata(result_[4]),
+		.m_axis_result_tdata(result_4),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[4])
 	);
@@ -94,7 +100,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[5]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
-		.m_axis_result_tdata(result_[5]),
+		.m_axis_result_tdata(result_5),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[5])
 	);
@@ -107,25 +113,21 @@ module fpu (
 		.s_axis_b_tready(ready_b[6]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
-		.m_axis_result_tdata(result_[6]),
+		.m_axis_result_tdata(result_6),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[6])
 	);
 
 
-	always_ff @)posedge CLK) begin
+	always_ff @(posedge CLK) begin
 		if (reset) begin
 			fpu_result <= 0;
 			state <= 0;
 			op1_ <= 0;
 			op2_ <= 0;
-			result_ <= 0;
-			ready_a <= 0;
-			ready_b <= 0;
 			ready_r <= 0;
 			valid_a <= 0;
 			valid_b <= 0;
-			valid_r <= 0;
 			i <= 3'b111;
 		end else begin
 			if (state == 0 && AorF) begin
@@ -151,7 +153,16 @@ module fpu (
 				ready_r <= 1;
 			end else if (state == 3 && valid_r[i]) begin
 				state <= 0;
-				fpu_result <= result_;
+				case (i)
+					3'b000 : fpu_result <= result_0;
+					3'b001 : fpu_result <= result_1;
+					3'b010 : fpu_result <= result_2;
+					3'b011 : fpu_result <= result_3;
+					3'b100 : fpu_result <= {24'h000000, result_4};
+					3'b101 : fpu_result <= {24'h000000, result_5};
+					3'b110 : fpu_result <= {24'h000000, result_6};
+					default : fpu_result <= result_0;
+				endcase
 				fpu_valid <= valid_r[i];
 				valid_a <= 0;
 				valid_b <= 0;

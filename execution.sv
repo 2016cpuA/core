@@ -27,7 +27,6 @@ module execution #(
 	input logic [INST_MEM_WIDTH-1:0] pc1,
 	output logic distinct_next,
 	output logic AorF_next,
-	output logic ALUOp_next,
  	output logic RegWrite_next,
 	output logic [1:0] MemtoReg_next,
 	output logic [1:0] Branch_next,
@@ -107,7 +106,6 @@ module execution #(
 		if (reset) begin
 		distinct_next <= 0;
 		AorF_next <= 0;
-		ALUOp_next <= 0;
 		RegWrite_next <= 0;
 		MemtoReg_next <= 0;
 		Branch_next <= 2'b11;
@@ -137,7 +135,6 @@ module execution #(
 		if (! AorF && state ==  0) begin
 		distinct_next <= distinct;
 		AorF_next <= AorF;
-		ALUOp_next <= ALUOp;
 		RegWrite_next <= RegWrite;
 		MemtoReg_next <= MemtoReg;
 		Branch_next <= Branch;
@@ -184,7 +181,6 @@ module execution #(
 		end else if (state == 1 && fpu_valid) begin
 			distinct_next <= distinct;
 			AorF_next <= AorF;
-			ALUOp_next <= ALUOp;
 			RegWrite_next <= RegWrite;
 			MemtoReg_next <= MemtoReg;
 			Branch_next <= Branch;
@@ -198,6 +194,7 @@ module execution #(
 			result <= fpu_result;
 			valid <= 1;
 			state <= 0;
+		end
 		end
 	end
 endmodule
