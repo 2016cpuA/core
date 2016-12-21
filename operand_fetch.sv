@@ -62,6 +62,8 @@ module operand_fetch #(
 			AorF_before,
 			RegWrite_before,
 			UART_write_enable,
+			MemWrite,
+			MemRead,
 			rs,
 			rt,
 			rw,

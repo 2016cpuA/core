@@ -6,6 +6,8 @@ module register (
 	input logic AorF_before,
 	input logic RegWrite,
 	input logic UART_write_enable,
+	input logic MemWrite,
+	input logic MemRead,
 	input logic [4:0] rs,
 	input logic [4:0] rt,
 	input logic [4:0] rw,
@@ -34,7 +36,10 @@ module register (
 			f[1] <= 0;
 			f[2] <= 0;
 		end else begin
-			if (AorF) begin
+			if (AorF && (MemWrite || MemRead)) begin
+				op1_sub <= r[rs];
+				op2_sub <= f[rt];
+			end else if (AorF) begin
 				op1_sub <= f[rs];
 				op2_sub <= f[rt];
 			end else begin

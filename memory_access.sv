@@ -56,7 +56,7 @@ module memory_access #(
 		alu_result, 
 		register_data, 
 		MemWrite, 
-		read_data, 
+		read_data_, 
 		MemRead
 	);
 
@@ -90,7 +90,21 @@ module memory_access #(
 			pc1_ <= 0;
 			pc2_ <= 0;
 		end else begin
-			if (state == 0 && valid) begin
+			if (!MemWrite && !Memread) begin
+				distinct_next <= distinct;
+				AorF_next <= AorF;
+				RegWrite_next <= RegWrite;
+				MemtoReg_next <= MemtoReg;
+				Branch_next <= Branch;
+				UARTtoReg_next <= UARTtoReg;
+				register_data_next <= register_data;
+				alu_result_next <= alu_result;
+				rdist_next <= rdist;
+				inst_index_next <= inst_index;
+				pc_next <= pc;
+				pc1_next <= pc1;
+				pc2_next <= pc2;
+			end else if (state == 0 && valid) begin
 				state <= state + 1;
 				distinct_ <= distinct;
 				AorF_ <= AorF;
@@ -122,6 +136,7 @@ module memory_access #(
 				pc_next <= pc_;
 				pc1_next <= pc1_;
 				pc2_next <= pc2_;
+				read_data <= read_data_;
 			end
 		end
 	end

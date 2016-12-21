@@ -144,7 +144,7 @@ module execution #(
 		result <= 0;
 		valid <= 0;
 		end else begin
-		if (! AorF && state ==  0) begin
+		if ((! AorF || MemWrite || MemRead) && state ==  0) begin
 			distinct_next <= distinct;
 			AorF_next <= AorF;
 			RegWrite_next <= RegWrite;
@@ -157,7 +157,7 @@ module execution #(
 			inst_index_next <= inst_index;
 			pc_next <= pc;
 			pc1_next <= pc1;
-			AorF_ <= AorF;
+
 			ALUSrcs_ <= ALUSrcs;
 			ALUSrcs2_ <= ALUSrcs2;
 			ALUOp_ <= ALUOp;
@@ -169,14 +169,11 @@ module execution #(
 			sa_ <= sa;
 			immediate_ <= immediate;
 			pc_ <= pc;
+
 			result <= alu_result;
 			valid <= 1;
 		end else if (state == 0) begin
-			if (MemWrite || MemRead) begin	
-				AorF_ <= 0;
-			end else begin
-				AorF_ <= 1;
-			end
+			AorF_  <= AorF;
 			ALUSrcs_ <= ALUSrcs;
 			ALUSrcs2_ <= ALUSrcs2;
 			ALUOp_ <= ALUOp;
