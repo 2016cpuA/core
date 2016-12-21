@@ -24,9 +24,15 @@ module inst_memory #( //前提：loader_readyは一瞬しか上がらない
 			inst_buffer <= 0;
 			distinct <= 1;
 		end else begin
-			if (inst != inst_buffer) begin
-				distinct <= 1;
-				inst_buffer <= inst;
+			if (state == 0 && (pc != pc_buffer)) begin
+				distinct_ <= 1;
+				pc_buffer <= pc;
+				state <= state + 1;
+			end else if (state == 1) begin
+				state <= state + 1;
+			end else if (state == 2) begin
+				state <= 0;
+				distinct <= distinct_; 
 			end else begin
 				distinct <= 0;
 			end

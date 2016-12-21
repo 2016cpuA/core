@@ -67,14 +67,12 @@ module inst_decode #(
 			distinct_next <= 0;
 			pc_next <= 0;
 			pc1_next <= 0;
-			state <= 0;
 		end else begin
 			if (inst_enable) begin
 				distinct_next <= distinct;
 				pc_next <= pc;
 				pc1_next <= pc1;
 				inst_ <= inst;
-				state <= 0;
 			end
 		end
 	end

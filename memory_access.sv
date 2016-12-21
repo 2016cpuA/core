@@ -62,7 +62,7 @@ module memory_access #(
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin
-			distinct_next <= 1;
+			distinct_next <= 0;
 			AorF_next <= 0;
 			RegWrite_next <= 0;
 			MemtoReg_next <= 2'b00;
@@ -76,7 +76,7 @@ module memory_access #(
 			pc1_next <= 0;
 			pc2_next <= 0;
 			state <= 0;
-			distinct_ <= 1;
+			distinct_ <= 0;
 			AorF_ <= 0;
 			RegWrite_ <= 0;
 			MemtoReg_ <= 0;
@@ -90,7 +90,7 @@ module memory_access #(
 			pc1_ <= 0;
 			pc2_ <= 0;
 		end else begin
-			if (!MemWrite && !Memread) begin
+			if (!MemWrite && !MemRead) begin
 				distinct_next <= distinct;
 				AorF_next <= AorF;
 				RegWrite_next <= RegWrite;

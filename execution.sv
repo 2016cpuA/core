@@ -59,7 +59,7 @@ module execution #(
 	logic [31:0] alu_result;
 	logic [31:0] fpu_result;
 	logic fpu_valid;
-	logic state;
+	logic [1:0] state;
 	logic distinct__;
 	logic AorF__;
 	logic RegWrite__;
@@ -145,19 +145,19 @@ module execution #(
 		valid <= 0;
 		end else begin
 		if ((! AorF || MemWrite || MemRead) && state ==  0) begin
-			distinct_next <= distinct;
-			AorF_next <= AorF;
-			RegWrite_next <= RegWrite;
-			MemtoReg_next <= MemtoReg;
-			Branch_next <= Branch;
-			MemWrite_next <= MemWrite;
-			MemRead_next <= MemRead;
-			UARTtoReg_next <= UARTtoReg;
-			register_data <= op2_sub;
-			inst_index_next <= inst_index;
-			pc_next <= pc;
-			pc1_next <= pc1;
-
+			distinct__ <= distinct;
+			AorF__ <= AorF;
+			RegWrite__ <= RegWrite;
+			MemtoReg__ <= MemtoReg;
+			Branch__ <= Branch;
+			MemWrite__ <= MemWrite;
+			MemRead__ <= MemRead;
+			UARTtoReg__ <= UARTtoReg;
+			op2_sub__ <= op2_sub;
+			inst_index__ <= inst_index;
+			pc__ <= pc;
+			pc1__ <= pc1;
+	
 			ALUSrcs_ <= ALUSrcs;
 			ALUSrcs2_ <= ALUSrcs2;
 			ALUOp_ <= ALUOp;
@@ -170,8 +170,8 @@ module execution #(
 			immediate_ <= immediate;
 			pc_ <= pc;
 
-			result <= alu_result;
-			valid <= 1;
+			valid <= 0;
+			state <= 2;
 		end else if (state == 0) begin
 			AorF_  <= AorF;
 			ALUSrcs_ <= ALUSrcs;
@@ -213,6 +213,22 @@ module execution #(
 			pc_next <= pc__;
 			pc1_next <= pc1__;
 			result <= fpu_result;
+			valid <= 1;
+			state <= 0;
+		end else if (state == 2) begin
+			distinct_next <= distinct__;
+			AorF_next <= AorF__;
+			RegWrite_next <= RegWrite__;
+			MemtoReg_next <= MemtoReg__;
+			Branch_next <= Branch__;
+			MemWrite_next <= MemWrite__;
+			MemRead_next <= MemRead__;
+			UARTtoReg_next <= UARTtoReg__;
+			register_data <= op2_sub__;
+			inst_index_next <= inst_index__;
+			pc_next <= pc__;
+			pc1_next <= pc1__;
+			result <= alu_result;
 			valid <= 1;
 			state <= 0;
 		end

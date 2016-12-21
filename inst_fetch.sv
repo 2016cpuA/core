@@ -13,28 +13,29 @@ module inst_fetch #(
 	output logic [INST_MEM_WIDTH-1:0] pc_next,
 	output logic [INST_MEM_WIDTH-1:0] pc1_next
 );
+	logic [31:0] inst_;
+    logic distinct_;
+    logic [INST_MEM_WIDTH-1:0] pc_;
+    logic [INST_MEM_WIDTH-1:0] pc1_;
+    logic [1:0] state;
+
 	inst_memory #(INST_MEM_WIDTH) inst_memory_instance(
 	       CLK, 
 	       reset, 
 	       pc, 
 	       inst_, 
-		   distinct_
+		   distinct
 	);
-
-	logic [31:0] inst_;
-	logic distinct_;
-	logic [INST_MEM_WIDTH-1:0] pc_;
-	logic [INST_MEM_WIDTH-1:0] pc1_;
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin //initialize
 			pc_next <= 0;
 			pc1_next <= 0;
 			inst_enable <= 1;
-			inst_ <= 0;
-			distinct_ <= 0;
 			pc_ <= 0;
 			pc1_ <= 0;
+			state <= 0;
+			inst <= 0;
 		end else begin
 			if (state == 0) begin
 				pc_ <= pc;
@@ -44,7 +45,6 @@ module inst_fetch #(
 				state <= state + 1;
 			end else if (state == 2) begin
 				inst <= inst_;
-				distinct <= distinct_;
 				pc_next <= pc;
 				pc1_next <= pc1;
 				state <= 0;
