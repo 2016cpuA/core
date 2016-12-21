@@ -60,7 +60,19 @@ module execution #(
 	logic [31:0] fpu_result;
 	logic fpu_valid;
 	logic state;
-
+	logic distinct__;
+	logic AorF__;
+	logic RegWrite__;
+	logic [1:0] MemtoReg__;
+	logic [1:0] Branch__;
+	logic MemWrite__;
+	logic MemRead__;
+	logic UARTtoReg__;
+	logic [31:0] op2_sub__;
+	logic [25:0] inst_index__;
+	logic [INST_MEM_WIDTH-1:0] pc__;
+	logic [INST_MEM_WIDTH-1:0] pc1__;
+	
 	op1_sel op1_sel_instance(
 			ALUSrcs2_, 
 			op1_sub_, 
@@ -133,32 +145,32 @@ module execution #(
 		valid <= 0;
 		end else begin
 		if (! AorF && state ==  0) begin
-		distinct_next <= distinct;
-		AorF_next <= AorF;
-		RegWrite_next <= RegWrite;
-		MemtoReg_next <= MemtoReg;
-		Branch_next <= Branch;
-		MemWrite_next <= MemWrite;
-		MemRead_next <= MemRead;
-		UARTtoReg_next <= UARTtoReg;
-		register_data <= op2_sub;
-		inst_index_next <= inst_index;
-		pc_next <= pc;
-		pc1_next <= pc1;
-		AorF_ <= AorF;
-		ALUSrcs_ <= ALUSrcs;
-		ALUSrcs2_ <= ALUSrcs2;
-		ALUOp_ <= ALUOp;
-		RegDist_ <= RegDist;
-		op1_sub_ <= op1_sub;
-		op2_sub_ <= op2_sub;
-		rt_ <= rt;
-		rd_ <= rd;
-		sa_ <= sa;
-		immediate_ <= immediate;
-		pc_ <= pc;
-		result <= alu_result;
-		valid <= 1;
+			distinct_next <= distinct;
+			AorF_next <= AorF;
+			RegWrite_next <= RegWrite;
+			MemtoReg_next <= MemtoReg;
+			Branch_next <= Branch;
+			MemWrite_next <= MemWrite;
+			MemRead_next <= MemRead;
+			UARTtoReg_next <= UARTtoReg;
+			register_data <= op2_sub;
+			inst_index_next <= inst_index;
+			pc_next <= pc;
+			pc1_next <= pc1;
+			AorF_ <= AorF;
+			ALUSrcs_ <= ALUSrcs;
+			ALUSrcs2_ <= ALUSrcs2;
+			ALUOp_ <= ALUOp;
+			RegDist_ <= RegDist;
+			op1_sub_ <= op1_sub;
+			op2_sub_ <= op2_sub;
+			rt_ <= rt;
+			rd_ <= rd;
+			sa_ <= sa;
+			immediate_ <= immediate;
+			pc_ <= pc;
+			result <= alu_result;
+			valid <= 1;
 		end else if (state == 0) begin
 			if (MemWrite || MemRead) begin	
 				AorF_ <= 0;
@@ -178,19 +190,31 @@ module execution #(
 			pc_ <= pc;	
 			state <= state + 1;
 			valid <= 0;
+			distinct__ <= distinct;
+			AorF__ <= AorF;
+			RegWrite__ <= RegWrite;
+			MemtoReg__ <= MemtoReg;
+			Branch__ <= Branch;
+			MemWrite__ <= MemWrite;
+			MemRead__ <= MemRead;
+			UARTtoReg__ <= UARTtoReg;
+			op2_sub__ <= op2_sub;
+			inst_index__ <= inst_index;
+			pc__ <= pc;
+			pc1__ <= pc1;
 		end else if (state == 1 && fpu_valid) begin
-			distinct_next <= distinct;
-			AorF_next <= AorF;
-			RegWrite_next <= RegWrite;
-			MemtoReg_next <= MemtoReg;
-			Branch_next <= Branch;
-			MemWrite_next <= MemWrite;
-			MemRead_next <= MemRead;
-			UARTtoReg_next <= UARTtoReg;
-			register_data <= op2_sub;
-			inst_index_next <= inst_index;
-			pc_next <= pc;
-			pc1_next <= pc1;
+			distinct_next <= distinct__;
+			AorF_next <= AorF__;
+			RegWrite_next <= RegWrite__;
+			MemtoReg_next <= MemtoReg__;
+			Branch_next <= Branch__;
+			MemWrite_next <= MemWrite__;
+			MemRead_next <= MemRead__;
+			UARTtoReg_next <= UARTtoReg__;
+			register_data <= op2_sub__;
+			inst_index_next <= inst_index__;
+			pc_next <= pc__;
+			pc1_next <= pc1__;
 			result <= fpu_result;
 			valid <= 1;
 			state <= 0;

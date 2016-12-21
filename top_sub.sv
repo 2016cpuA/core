@@ -45,6 +45,7 @@ module top_sub #(  // todo : reset system
 	logic [INST_MEM_WIDTH-1:0] pc_to_id;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_id;
 	logic distinct_next_from_id;
+	logic AorF_from_id;
  	logic RegWrite_from_id;
 	logic [1:0] MemtoReg_from_id;
 	logic [1:0] ALUSrcs_from_id;
@@ -68,12 +69,14 @@ module top_sub #(  // todo : reset system
 	//operand_fetch
 	logic distinct_to_op;
 	logic distinct_before_to_op;
+	logic AorF_before_to_op;
 	logic RegWrite_before_to_op;
 	logic UART_write_enable_to_op;
 	logic [4:0] rs_to_op;
 	logic [4:0] rt_to_op;
 	logic [4:0] rw_to_op;
 	logic [31:0] write_data_to_op;
+	logic AorF_to_op;
  	logic RegWrite_to_op;
 	logic [1:0] MemtoReg_to_op;
 	logic [1:0] ALUSrcs_to_op;
@@ -94,6 +97,7 @@ module top_sub #(  // todo : reset system
 	logic distinct_next_from_op;
 	logic [31:0] op1_sub_from_op;
 	logic [31:0] op2_sub_from_op;
+	logic AorF_next_from_op;
 	logic RegWrite_next_from_op;
 	logic [1:0] MemtoReg_next_from_op;
 	logic [1:0] ALUSrcs_next_from_op;
@@ -171,7 +175,7 @@ module top_sub #(  // todo : reset system
 	logic [INST_MEM_WIDTH-1:0] pc1_to_mem;
 	logic [INST_MEM_WIDTH-1:0] pc2_to_mem;
 	logic distinct_next_from_mem;
-	logic Aorf_next_from_mem;
+	logic AorF_next_from_mem;
  	logic RegWrite_next_from_mem;
 	logic [1:0] MemtoReg_next_from_mem;
 	logic [1:0] Branch_next_from_mem;
@@ -188,6 +192,7 @@ module top_sub #(  // todo : reset system
 
 	//wriet_buffer_pc_generate
 	logic distinct_to_wb;
+	logic AorF_to_wb;
 	logic RegWrite_to_wb;
 	logic [1:0] MemtoReg_to_wb;
 	logic [1:0] Branch_to_wb;
@@ -203,6 +208,7 @@ module top_sub #(  // todo : reset system
 	logic input_ready_to_wb;
 	logic [31:0] input_data_to_wb;
 	logic distinct_next_from_wb;
+	logic AorF_next_from_wb;
 	logic RegWrite_next_from_wb;
 	logic UART_write_enable_from_wb;
 	logic [31:0] data_from_wb;
@@ -510,7 +516,6 @@ module top_sub #(  // todo : reset system
 	assign pc_to_ex 				= pc_next_from_op;
 	assign pc1_to_ex 				= pc1_next_from_op;
 	assign distinct_to_mem			= distinct_next_from_ex;
-	assign AorF_to_mem 				= AorF_next_from_ex;
 	assign RegWrite_to_mem 			= RegWrite_next_from_ex;
 	assign MemtoReg_to_mem 			= MemtoReg_next_from_ex;
 	assign Branch_to_mem 			= Branch_next_from_ex;
@@ -540,7 +545,12 @@ module top_sub #(  // todo : reset system
 	assign pc2_to_wb 				= pc2_next_from_mem;
 	assign input_ready_to_wb 		= input_ready;
 	assign input_data_to_wb 		= input_data;
-	
+	assign AorF_to_op 				= AorF_from_id;
+	assign AorF_before_to_op		= AorF_next_from_wb;
+	assign AorF_to_ex 				= AorF_next_from_op;
+	assign AorF_to_mem				= AorF_next_from_ex;
+	assign AorF_to_wb				= AorF_next_from_mem;
+
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 			led <= 8'b01010101;

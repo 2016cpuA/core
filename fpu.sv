@@ -25,6 +25,7 @@ module fpu (
 	logic valid_b;
 	logic [6:0] valid_r;
 	logic [2:0] i;
+	logic areset;
 	
 	fadd fadd_instance(
 		.s_axis_a_tdata(op1_),
@@ -34,6 +35,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[0]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
+		.aresetn(areset),
 		.m_axis_result_tdata(result_0),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[0])
@@ -121,11 +123,13 @@ module fpu (
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin
+			areset <= 0;
 			fpu_result <= 0;
+			fpu_valid <= 0;
 			state <= 0;
 			op1_ <= 0;
 			op2_ <= 0;
-			ready_r <= 0;
+			ready_r <= 1;
 			valid_a <= 0;
 			valid_b <= 0;
 			i <= 3'b111;
@@ -147,8 +151,8 @@ module fpu (
 				valid_a <= 1;
 				op1_ <= op1;
 			end else if (state == 2 && ready_b[i]) begin
-				state <= state + 1;
 				valid_b <= 1;
+				state <= state + 1;
 				op2_ <= op2;
 				ready_r <= 1;
 			end else if (state == 3 && valid_r[i]) begin
@@ -169,6 +173,7 @@ module fpu (
 				ready_r <= 0;
 			end else begin
 				fpu_valid <= 0;
+				areset <= 1;
 			end
 		end
 	end
