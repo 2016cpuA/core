@@ -7,11 +7,14 @@ module sender_buffer2 (
 	output logic [7:0] output_data,
 	output logic valid
 );
-	logic [31:0] buffer [31:0];
-	logic [4:0] tail;
-	logic [4:0] head;
+	localparam num = 2;
+
+	logic [31:0] buffer [2**num-1:0];
+	logic [num-1:0] tail;
+	logic [num-1:0] head;
 	logic start_buffer;
-	logic [2:0] state;
+	logic state;
+	logic [2:0] state_;
 	logic buffer_enable;
 	integer i;
 
@@ -24,37 +27,40 @@ module sender_buffer2 (
 			head <= 0;
 			start_buffer <= 0;
 			state <= 0;
+			state_ <= 0;
 			buffer_enable <= 0;
 		end else begin
-			if ((state == 0) && (start != start_buffer) && start) begin
-				start_buffer <= start;
-				state <= state + 1;
-			end else if ((state == 0) && (start != start_buffer) && !start) begin
-				start_buffer <= start;
-			end else if ((state == 1) && start_buffer) begin
+//			if ((state == 0) && (start != start_buffer) && start) begin
+//				start_buffer <= start;
+//				state <= state + 1;
+//			end else if ((state == 0) && (start != start_buffer) && !start) begin
+//				start_buffer <= start;
+//			end else if ((state == 1) && start_buffer) begin
+			if (start) begin
 				buffer[tail] <= data;
 				tail = tail + 1;
 				buffer_enable <= 1;
-				state <= state + 1;
-			end if ((state == 2) && sender_ready && buffer_enable) begin
+//				state <= 0;
+			end 
+			if ((state_ == 0) && sender_ready && buffer_enable) begin
 				output_data <= buffer[head][31:24];
-				state <= state + 1;
+				state_ <= state_ + 1;
 				valid <= 1;
-			end else if ((state == 3) && sender_ready) begin
+			end else if ((state_ == 1) && sender_ready) begin
 				output_data <= buffer[head][23:16];
-				state <= state + 1;
-			end else if ((state == 4) && sender_ready) begin
+				state_ <= state_ + 1;
+			end else if ((state_ == 2) && sender_ready) begin
 				output_data <= buffer[head][15:8];
-				state <= state + 1;
-			end else if ((state == 5) && sender_ready) begin
+				state_ <= state_ + 1;
+			end else if ((state_ == 3) && sender_ready) begin
 				output_data <= buffer[head][7:0];
-				state <= state + 1;
-			end else if ((state >= 6) && (start != start_buffer) && sender_ready) begin
-				state <= 0;
+				state_ <= state_ + 1;
+			end else if ((state_ >= 4) && (start != start_buffer) && sender_ready) begin
+				state_ <= 0;
 				valid <= 0;
 				buffer_enable <= 0;
 				head = head + 1;
-			end else if ((state >= 6) && (start == start_buffer) && sender_ready) begin
+			end else if ((state_ >= 4) && (start == start_buffer) && sender_ready) begin
 				valid <= 0;
 				buffer_enable <= 0;
 				head = head + 1;

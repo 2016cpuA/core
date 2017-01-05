@@ -238,11 +238,13 @@ module top_sub #(  // todo : reset system
 			input_data, 
 			input_ready
 	);
+	logic start_send;
+	assign start_send = RegtoUART_to_ex & distinct_to_ex;
 	sender_buffer2 sender_buffer_instance (
 			CLK, 
 			reset, 
 			op1_sub_to_ex,
-			RegtoUART_to_ex, 
+			start_send, 
 			sender_ready, 
 			sender_data, 
 			sender_enable
@@ -558,14 +560,14 @@ module top_sub #(  // todo : reset system
 		if (reset) begin
 			led <= 8'b01010101;
 		end else begin
-			led[0] <= data_from_wb[31];
-			led[1] <= data_from_wb[30];
-			led[2] <= data_from_wb[29];
-			led[3] <= data_from_wb[28];
-			led[4] <= data_from_wb[27];
-			led[5] <= data_from_wb[26];
-			led[6] <= data_from_wb[25];
-			led[7] <= data_from_wb[24];
+			led[0] <= sender_data[31];
+			led[1] <= sender_data[30];
+			led[2] <= sender_data[29];
+			led[3] <= sender_data[28];
+			led[4] <= sender_data[27];
+			led[5] <= sender_data[26];
+			led[6] <= sender_data[25];
+			led[7] <= sender_data[24];
 		end
 	end
 endmodule

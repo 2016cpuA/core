@@ -177,7 +177,7 @@ module fpu (
 				op2_ <= op2;
 				ready_r <= 1;
 			end else if (state == 3 && valid_r[i]) begin
-				state <= 0;
+				state <= state + 1;
 				case (i)
 					3'b000 : fpu_result <= result_0;
 					3'b001 : fpu_result <= result_1;
@@ -192,6 +192,10 @@ module fpu (
 				valid_a <= 0;
 				valid_b <= 0;
 				ready_r <= 0;
+				areset <= 0;
+			end else if (state == 4) begin
+				areset <= 1;
+				state <= 0;
 			end else begin
 				fpu_valid <= 0;
 				areset <= 1;

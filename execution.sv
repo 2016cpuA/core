@@ -224,6 +224,8 @@ module execution #(
 			pc2 <= pc2_;
 			valid <= 1;
 			state <= 0;
+			AorF_ <= 0;
+			distinct__ <= 0;
 		end else if (state == 2) begin
 			distinct_next <= distinct__;
 			AorF_next <= AorF__;
