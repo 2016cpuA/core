@@ -48,7 +48,8 @@ module memory_access #(
 	logic [INST_MEM_WIDTH-1:0] pc_;
 	logic [INST_MEM_WIDTH-1:0] pc1_;
 	logic [INST_MEM_WIDTH-1:0] pc2_;
-	
+	logic [31:0] read_data_;
+
 	data_memory data_memory_instance(
 		CLK, 
 		reset, 
@@ -90,7 +91,7 @@ module memory_access #(
 			pc1_ <= 0;
 			pc2_ <= 0;
 		end else begin
-			if (!MemWrite && !MemRead) begin
+			if (!MemWrite && !MemRead && distinct) begin
 				distinct_next <= distinct;
 				AorF_next <= AorF;
 				RegWrite_next <= RegWrite;
@@ -104,7 +105,7 @@ module memory_access #(
 				pc_next <= pc;
 				pc1_next <= pc1;
 				pc2_next <= pc2;
-			end else if (state == 0 && valid) begin
+			end else if (state == 0 && valid && distinct) begin
 				state <= state + 1;
 				distinct_ <= distinct;
 				AorF_ <= AorF;
@@ -119,9 +120,10 @@ module memory_access #(
 				pc_ <= pc;
 				pc1_ <= pc1;
 				pc2_ <= pc2;
+				distinct_next <= 0;
 			end else if (state == 1) begin
 				state <= state + 1;
-			end else begin
+			end else if (state == 2) begin
 				state <= 0;
 				distinct_next <= distinct_;
 				AorF_next <= AorF_;
@@ -137,6 +139,8 @@ module memory_access #(
 				pc1_next <= pc1_;
 				pc2_next <= pc2_;
 				read_data <= read_data_;
+			end else begin
+				distinct_next <= 0;
 			end
 		end
 	end

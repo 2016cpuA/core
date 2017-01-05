@@ -1,5 +1,5 @@
 module top_sub #(  // todo : reset system
-	parameter INST_MEM_WIDTH = 5
+	parameter INST_MEM_WIDTH = 15
 ) (
 	input logic CLK,
 	input logic UART_RX,
@@ -28,6 +28,7 @@ module top_sub #(  // todo : reset system
 	//sender_buffer
 
 	//inst_fetch
+	logic distinct_before_to_if;
 	logic [INST_MEM_WIDTH-1:0] pc_to_if;
 	logic [INST_MEM_WIDTH-1:0] pc1_to_if;
 	logic input_start_to_if;
@@ -251,6 +252,7 @@ module top_sub #(  // todo : reset system
 	inst_fetch #(INST_MEM_WIDTH) inst_fetch_instance(
 			CLK, 
 			reset, 
+			distinct_before_to_if,
 			pc_to_if, 
 			pc1_to_if, 
 			input_start_to_if, 
@@ -460,6 +462,7 @@ module top_sub #(  // todo : reset system
 			pc1_next_from_wb
 	);
 
+	assign distinct_before_to_if	= distinct_next_from_wb;
 	assign pc_to_if 				= pc_generated_from_wb;
 	assign pc1_to_if 				= pc1_next_from_wb;
 	assign input_start_to_if 	   	= sw_n_10;

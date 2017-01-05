@@ -1,8 +1,7 @@
 `timescale 1ns/10ps
 
 module test_top #(
-	parameter INST_MEM_WIDTH = 5,
-	parameter DATA_MEM_WIDTH = 10
+	parameter INST_MEM_WIDTH = 15
 );
     logic CLK;
 	logic UART_RX;
@@ -15,7 +14,7 @@ module test_top #(
 	logic UART_TX;
 	logic [7:0] led;
 
-	top_sub #(INST_MEM_WIDTH, DATA_MEM_WIDTH) top_sub_instance(
+	top_sub #(INST_MEM_WIDTH) top_sub_instance(
 			CLK,
 			UART_RX,
 			sw_n_10,

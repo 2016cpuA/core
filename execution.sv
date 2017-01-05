@@ -54,8 +54,10 @@ module execution #(
 	logic [4:0] rt_;
 	logic [4:0] rd_;
 	logic [4:0] sa_;
+	logic [4:0] rdist_;
 	logic [15:0] immediate_;
 	logic [INST_MEM_WIDTH-1:0] pc_;
+	logic [INST_MEM_WIDTH-1:0] pc2_;
 	logic [31:0] alu_result;
 	logic [31:0] fpu_result;
 	logic fpu_valid;
@@ -72,7 +74,8 @@ module execution #(
 	logic [25:0] inst_index__;
 	logic [INST_MEM_WIDTH-1:0] pc__;
 	logic [INST_MEM_WIDTH-1:0] pc1__;
-	
+	logic AorF___;
+
 	op1_sel op1_sel_instance(
 			ALUSrcs2_, 
 			op1_sub_, 
@@ -87,15 +90,17 @@ module execution #(
 			op2
 	);
 	dist_sel dist_sel_instance(
+			AorF_,
 			RegDist_, 
 			rd_, 
 			rt_, 
-			rdist
+			sa_,
+			rdist_
 	);
 	pc_adder #(INST_MEM_WIDTH) pc_adder2_instance(
 			pc_, 
 			immediate_[INST_MEM_WIDTH-1:0], 
-			pc2
+			pc2_
 	);
 	alu alu_instance(
 			ALUOp_, 
@@ -106,10 +111,12 @@ module execution #(
 	fpu fpu_instance(
 			CLK,
 			reset,
+			distinct__,
 			AorF_,
 			ALUOp_,
 			op1,
 			op2,
+			AorF___,
 			fpu_result,
 			fpu_valid
 	);
@@ -144,7 +151,7 @@ module execution #(
 		result <= 0;
 		valid <= 0;
 		end else begin
-		if ((! AorF || MemWrite || MemRead) && state ==  0) begin
+		if ((! AorF || MemWrite || MemRead) && (state ==  0) && distinct) begin
 			distinct__ <= distinct;
 			AorF__ <= AorF;
 			RegWrite__ <= RegWrite;
@@ -172,7 +179,7 @@ module execution #(
 
 			valid <= 0;
 			state <= 2;
-		end else if (state == 0) begin
+		end else if ((state == 0) && distinct) begin
 			AorF_  <= AorF;
 			ALUSrcs_ <= ALUSrcs;
 			ALUSrcs2_ <= ALUSrcs2;
@@ -201,7 +208,7 @@ module execution #(
 			pc1__ <= pc1;
 		end else if (state == 1 && fpu_valid) begin
 			distinct_next <= distinct__;
-			AorF_next <= AorF__;
+			AorF_next <= AorF___;
 			RegWrite_next <= RegWrite__;
 			MemtoReg_next <= MemtoReg__;
 			Branch_next <= Branch__;
@@ -213,6 +220,8 @@ module execution #(
 			pc_next <= pc__;
 			pc1_next <= pc1__;
 			result <= fpu_result;
+			rdist <= rdist_;
+			pc2 <= pc2_;
 			valid <= 1;
 			state <= 0;
 		end else if (state == 2) begin
@@ -228,9 +237,13 @@ module execution #(
 			inst_index_next <= inst_index__;
 			pc_next <= pc__;
 			pc1_next <= pc1__;
+			pc2 <= pc2_;
+			rdist <= rdist_;
 			result <= alu_result;
 			valid <= 1;
 			state <= 0;
+		end else begin
+			distinct_next <= 0;
 		end
 		end
 	end

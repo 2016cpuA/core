@@ -1,10 +1,12 @@
 module fpu (
 	input logic CLK,
 	input logic reset,
+	input logic distinct,
 	input logic AorF,
 	input logic [3:0] ALUOp,
 	input logic [31:0] op1,
 	input logic [31:0] op2,
+	output logic AorF_,
 	output logic [31:0] fpu_result,
 	output logic fpu_valid
 );
@@ -49,6 +51,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[1]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
+		.aresetn(areset),
 		.m_axis_result_tdata(result_1),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[1])
@@ -62,6 +65,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[2]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
+		.aresetn(areset),
 		.m_axis_result_tdata(result_2),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[2])
@@ -76,6 +80,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[3]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
+		.aresetn(areset),
 		.m_axis_result_tdata(result_3),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[3])
@@ -89,6 +94,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[4]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
+		.aresetn(areset),
 		.m_axis_result_tdata(result_4),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[4])
@@ -102,6 +108,7 @@ module fpu (
 		.s_axis_b_tready(ready_b[5]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
+		.aresetn(areset),
 		.m_axis_result_tdata(result_5),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[5])
@@ -115,11 +122,25 @@ module fpu (
 		.s_axis_b_tready(ready_b[6]),
 		.s_axis_b_tvalid(valid_b),
 		.aclk(CLK),
+		.aresetn(areset),
 		.m_axis_result_tdata(result_6),
 		.m_axis_result_tready(ready_r),
 		.m_axis_result_tvalid(valid_r[6])
 	);
 
+
+	always_comb begin
+		case (ALUOp)
+			4'b0011 : AorF_ <= 1;
+			4'b0100 : AorF_ <= 1;
+			4'b1110 : AorF_ <= 1;
+			4'b1101 : AorF_ <= 1;
+			4'b1100 : AorF_ <= 0;
+			4'b1011 : AorF_ <= 0;
+			4'b1010 : AorF_ <= 0;
+			default : AorF_ <= 1;
+		endcase
+	end
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin
@@ -134,7 +155,7 @@ module fpu (
 			valid_b <= 0;
 			i <= 3'b111;
 		end else begin
-			if (state == 0 && AorF) begin
+			if (state == 0 && AorF && distinct) begin
 				state <= state + 1;
 				case (ALUOp)
 					4'b0011 : i <= 3'b000;

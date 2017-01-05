@@ -1,5 +1,5 @@
 module top #(  // todo : reset system
-	parameter INST_MEM_WIDTH = 5
+	parameter INST_MEM_WIDTH = 15
 ) (
 	input logic CLK_P,
 	input logic CLK_N,

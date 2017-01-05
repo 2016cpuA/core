@@ -20,8 +20,7 @@ module data_memory (
 		.wea(w_enable)
 	);
 
-	assign enable = (MemWrite | MemRead) & distinct;
+	assign enable = (MemWrite | MemRead);
 	assign w_enable = MemWrite & (!MemRead) & distinct;
-
 endmodule
 

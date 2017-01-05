@@ -10,6 +10,7 @@ module register (
 	input logic MemRead,
 	input logic [4:0] rs,
 	input logic [4:0] rt,
+	input logic [4:0] rd,
 	input logic [4:0] rw,
 	input logic [31:0] write_data,
 	output logic [31:0] op1_sub,
@@ -25,22 +26,16 @@ module register (
 			op1_sub <= 0;
 			op2_sub <= 0;
 			buffer <= 0;
-			for (i = 3; i < 32; i = i + 1) begin
+			for (i = 0; i < 32; i = i + 1) begin
 				r[i] <= 0;
 				f[i] <= 0;
 			end
-			r[0] <= 0;
-			r[1] <= 0;
-			r[2] <= 0;
-			f[0] <= 32'h3f800000;
-			f[1] <= 0;
-			f[2] <= 0;
 		end else begin
 			if (AorF && (MemWrite || MemRead)) begin
 				op1_sub <= r[rs];
 				op2_sub <= f[rt];
 			end else if (AorF) begin
-				op1_sub <= f[rs];
+				op1_sub <= f[rd];
 				op2_sub <= f[rt];
 			end else begin
 				op1_sub <= r[rs];

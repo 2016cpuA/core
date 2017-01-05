@@ -66,6 +66,7 @@ module operand_fetch #(
 			MemRead,
 			rs,
 			rt,
+			rd,
 			rw,
 			write_data,
 			op1_sub,

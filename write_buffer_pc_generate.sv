@@ -36,6 +36,11 @@ module write_buffer_pc_generate #(
 	logic [25:0] inst_index_buf;
 	logic [INST_MEM_WIDTH-1:0] pc1_buf;
 	logic [INST_MEM_WIDTH-1:0] pc2_buf;
+	logic distinct_;
+	logic AorF_;
+	logic RegWrite_;
+	logic [4:0] rd_;
+	logic state;
 
 	branch branch_instance(
 		Branch_buf, 
@@ -76,7 +81,7 @@ module write_buffer_pc_generate #(
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin
-			distinct_next <= 0;
+			distinct_next <= 1;
 			AorF_next <= 0;
 			RegWrite_next <= 0;
 			Branch_buf <= 2'b11;
@@ -86,17 +91,33 @@ module write_buffer_pc_generate #(
 			inst_index_buf <= 0;
 			pc1_buf <= 0;
 			pc2_buf <= 0;
+			state <= 0;
+			distinct_ <= 0;
+			AorF_ <= 0;
+			RegWrite_ <= 0;
 		end else begin
-			distinct_next <= distinct;
-			AorF_next <= AorF;
-			RegWrite_next <= RegWrite;
-			Branch_buf <= Branch;
-			register_data_buf <= register_data;
-			alu_result_buf <= alu_result;
-			rd_next <= rd;
-			inst_index_buf <= inst_index;
-			pc1_buf <= pc1;
-			pc2_buf <= pc2;
+			if (state == 0 && distinct) begin
+				distinct_ <= distinct;
+				AorF_ <= AorF;
+				RegWrite_ <= RegWrite;
+				Branch_buf <= Branch;
+				rd_ <= rd;
+				register_data_buf <= register_data;
+				alu_result_buf <= alu_result;
+				inst_index_buf <= inst_index;
+				pc1_buf <= pc1;
+				pc2_buf <= pc2;
+				state <= state + 1;
+				distinct_next <= 0;
+			end else if (state == 1) begin
+				rd_next <= rd_;
+				distinct_next <= distinct_;
+				AorF_next <= AorF_;
+				RegWrite_next <= RegWrite_;
+				state <= 0;
+			end else begin
+				distinct_next <= 0;
+			end
 		end
 	end
 endmodule

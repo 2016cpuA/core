@@ -1,8 +1,9 @@
 module inst_fetch #(
-	parameter INST_MEM_WIDTH = 2
+	parameter INST_MEM_WIDTH = 15
 ) (
 	input logic CLK, 
 	input logic reset,
+	input logic distinct_before,
 	input logic [INST_MEM_WIDTH-1:0] pc,
 	input logic [INST_MEM_WIDTH-1:0] pc1,
 	input logic input_start,
@@ -22,9 +23,9 @@ module inst_fetch #(
 	inst_memory #(INST_MEM_WIDTH) inst_memory_instance(
 	       CLK, 
 	       reset, 
-	       pc, 
+	       pc_, 
 	       inst_, 
-		   distinct
+		   distinct_
 	);
 
 	always_ff @(posedge CLK) begin
@@ -33,21 +34,28 @@ module inst_fetch #(
 			pc1_next <= 0;
 			inst_enable <= 1;
 			pc_ <= 0;
-			pc1_ <= 0;
-			state <= 0;
+			pc1_ <= 1;
 			inst <= 0;
+			distinct <= 0;
+			state <= 1;
 		end else begin
-			if (state == 0) begin
+			if (state == 0 && distinct_before) begin
 				pc_ <= pc;
 				pc1_ <= pc1;
 				state <= state + 1;
+				distinct <= 0;
 			end else if (state == 1) begin
 				state <= state + 1;
 			end else if (state == 2) begin
+				state <= state + 1;
+			end else if (state == 3) begin
 				inst <= inst_;
-				pc_next <= pc;
-				pc1_next <= pc1;
+				distinct <= distinct_;
+				pc_next <= pc_;
+				pc1_next <= pc1_;
 				state <= 0;
+			end else begin
+				distinct <= 0;
 			end
 		end
 		if (input_start) begin
