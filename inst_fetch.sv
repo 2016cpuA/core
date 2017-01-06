@@ -4,6 +4,7 @@ module inst_fetch #(
 	input logic CLK, 
 	input logic reset,
 	input logic distinct_before,
+	input logic full,
 	input logic [INST_MEM_WIDTH-1:0] pc,
 	input logic [INST_MEM_WIDTH-1:0] pc1,
 	input logic input_start,
@@ -48,7 +49,7 @@ module inst_fetch #(
 				state <= state + 1;
 			end else if (state == 2) begin
 				state <= state + 1;
-			end else if (state == 3) begin
+			end else if (state == 3 && (!full)) begin
 				inst <= inst_;
 				distinct <= distinct_;
 				pc_next <= pc_;

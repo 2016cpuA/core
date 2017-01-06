@@ -26,6 +26,7 @@ module top_sub #(  // todo : reset system
 	logic input_ready;
 
 	//sender_buffer
+	logic full;
 
 	//inst_fetch
 	logic distinct_before_to_if;
@@ -247,6 +248,7 @@ module top_sub #(  // todo : reset system
 			start_send, 
 			sender_ready, 
 			sender_data, 
+			full,
 			sender_enable
 	);
 
@@ -255,6 +257,7 @@ module top_sub #(  // todo : reset system
 			CLK, 
 			reset, 
 			distinct_before_to_if,
+			full,
 			pc_to_if, 
 			pc1_to_if, 
 			input_start_to_if, 
@@ -264,7 +267,6 @@ module top_sub #(  // todo : reset system
 			inst_enable_from_if, 
 			pc_next_from_if, 
 			pc1_next_from_if
-//			led
 	);
 	
 	//inst decode
