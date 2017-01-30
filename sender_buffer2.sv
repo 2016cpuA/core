@@ -8,7 +8,7 @@ module sender_buffer2 (
 	output logic full,
 	output logic valid
 );
-	localparam num = 2;
+	localparam num = 9;
 
 	logic [32:0] buffer [2**num-1:0];
 	logic [num-1:0] tail;
@@ -20,8 +20,8 @@ module sender_buffer2 (
 	logic [31:0] register;
 	integer i;
 
-	assign buf_full = (tail == head) & tail[32];
-	assign buf_null = (tail == head) & (!tail[32]);
+	assign buf_full = (tail == head) & buffer[tail][32];
+	assign buf_null = (tail == head) & (!buffer[tail][32]);
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin

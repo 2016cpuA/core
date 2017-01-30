@@ -7,8 +7,8 @@ module receiver_buffer(
 	output logic ready
 );
 	logic [2:0] state;
-	logic [31:0] buffer;
-
+	logic [1023:0] buffer;
+	
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 			state <= 0;

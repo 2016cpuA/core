@@ -12,7 +12,7 @@ module data_memory (
 	logic w_enable;
 
 	data_mem_bl data_mem_bl(
-		.addra(address[16:0]),
+		.addra(address[18:0]),
 		.clka(CLK),
 		.dina(write_data),
 		.douta(read_data),
