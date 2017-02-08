@@ -1,5 +1,5 @@
 module inst_memory #( //前提：loader_readyは一瞬しか上がらない
-	parameter INST_MEM_WIDTH = 15
+	parameter INST_MEM_WIDTH = 14
 ) (
 	input logic CLK,
 	input logic reset,

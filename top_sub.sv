@@ -1,5 +1,5 @@
 module top_sub #(  // todo : reset system
-	parameter INST_MEM_WIDTH = 15
+	parameter INST_MEM_WIDTH = 14
 ) (
 	input logic CLK,
 	input logic UART_RX,
@@ -236,6 +236,7 @@ module top_sub #(  // todo : reset system
 			reset,
 			receiver_data, 
 			receiver_valid, 
+			UARTtoReg_to_wb,
 			input_data, 
 			input_ready
 	);
@@ -562,14 +563,14 @@ module top_sub #(  // todo : reset system
 		if (reset) begin
 			led <= 8'b01010101;
 		end else begin
-			led[0] <= inst_from_if[7];
-			led[1] <= inst_from_if[6];
-			led[2] <= inst_from_if[5];
-			led[3] <= inst_from_if[4];
-			led[4] <= inst_from_if[3];
-			led[5] <= inst_from_if[2];
-			led[6] <= inst_from_if[1];
-			led[7] <= inst_from_if[0];
+			led[0] <= inst_from_if[31];
+			led[1] <= inst_from_if[30];
+			led[2] <= inst_from_if[29];
+			led[3] <= inst_from_if[28];
+			led[4] <= inst_from_if[27];
+			led[5] <= inst_from_if[26];
+			led[6] <= inst_from_if[25];
+			led[7] <= inst_from_if[24];
 		end
 	end
 endmodule

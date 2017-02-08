@@ -1,5 +1,5 @@
 module execution #(
-	parameter INST_MEM_WIDTH = 2
+	parameter INST_MEM_WIDTH = 5
 ) (
 	input logic CLK,
 	input logic reset,
@@ -120,7 +120,8 @@ module execution #(
 			fpu_result,
 			fpu_valid
 	);
-
+//    assign fpu_result = 0;
+//   assign fpu_valid = 0;
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 		distinct_next <= 0;

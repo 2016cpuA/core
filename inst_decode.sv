@@ -1,5 +1,5 @@
 module inst_decode #(
-	parameter INST_MEM_WIDTH = 2
+	parameter INST_MEM_WIDTH = 5
 ) (
 	input logic CLK,
 	input logic reset,

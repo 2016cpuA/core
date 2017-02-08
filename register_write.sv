@@ -50,6 +50,7 @@ module register_write #(
 				pc_enable <= 0;
 			end else if ((state == 2) && distinct) begin
 				state <= 0;
+				UART_write_enable <= 0;
 			end
 		end	
 	end

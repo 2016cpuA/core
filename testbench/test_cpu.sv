@@ -1,7 +1,5 @@
-`timescale 1ns/10ps
-
 module test_top #(
-	parameter INST_MEM_WIDTH = 15
+	parameter INST_MEM_WIDTH = 14
 );
     logic CLK;
 	logic UART_RX;
@@ -26,7 +24,7 @@ module test_top #(
 			UART_TX,
 			led
 	);
-	localparam WAIT = 259;
+	localparam WAIT = 271.3;
 	localparam CLK_ = 1;
 	always begin
 		CLK <= 1;
@@ -35,16 +33,103 @@ module test_top #(
 		#0.5;
 	end
 
-	integer fp,status;
+	integer i;
 	logic buffer;
 	initial begin
 		#1;
 		UART_RX <= 1;
 		sw_n_10 <= 0;
 		sw_s_8 <= 0;
-		#WAIT;
+		#7000;
 		sw_c_7 <= 1;
 		#WAIT;
 		sw_c_7 <= 0;
+		#WAIT;
+		
+		for (i=0; i<100; i=i+1) begin
+		UART_RX <= 0;
+		#WAIT;		
+		UART_RX <= 1;
+		#WAIT;
+		UART_RX <= 0;
+		#WAIT;
+		UART_RX <= 1;
+		#WAIT;
+		UART_RX <= 0;
+		#WAIT;
+		UART_RX <= 1;
+		#WAIT;
+		UART_RX <= 0;
+		#WAIT;
+		UART_RX <= 1;
+		#WAIT;
+		UART_RX <= 0;
+		#WAIT;
+		UART_RX <= 1;
+		#WAIT;
+		#WAIT;
+		UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;																				
+		#WAIT;
+		#WAIT;
+		UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+		#WAIT;
+		UART_RX <= 0;
+        #WAIT;
+		UART_RX <= 0;
+		#WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 0;
+        #WAIT;
+        UART_RX <= 1;
+        #WAIT;
+        UART_RX <= 1;        		
+		#WAIT;
+		end
 		end	
 endmodule

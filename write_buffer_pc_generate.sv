@@ -1,5 +1,5 @@
 module write_buffer_pc_generate #(
-	parameter INST_MEM_WIDTH = 2
+	parameter INST_MEM_WIDTH = 5
 ) (
 	input logic CLK,
 	input logic reset,
@@ -109,12 +109,18 @@ module write_buffer_pc_generate #(
 				pc2_buf <= pc2;
 				state <= state + 1;
 				distinct_next <= 0;
-			end else if (state == 1) begin
+			end else if (state == 1 && !UARTtoReg)  begin
 				rd_next <= rd_;
 				distinct_next <= distinct_;
 				AorF_next <= AorF_;
 				RegWrite_next <= RegWrite_;
 				state <= 0;
+			end else if ((state == 1 && UARTtoReg) && UART_write_enable) begin
+				rd_next <= rd_;
+                distinct_next <= distinct_;
+                AorF_next <= AorF_;
+                RegWrite_next <= RegWrite_;
+                state <= 0;			     
 			end else begin
 				distinct_next <= 0;
 			end

@@ -41,7 +41,7 @@ module register (
 				op1_sub <= r[rs];
 				op2_sub <= r[rt];
 			end
-			if ((RegWrite || UART_write_enable) && (distinct != buffer)) begin
+			if ((RegWrite && (distinct != buffer)) || (UART_write_enable && distinct)) begin
 				if (AorF_before) begin
 					f[rw] <= write_data;
 				end else begin
