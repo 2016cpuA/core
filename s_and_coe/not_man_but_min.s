@@ -17,14 +17,14 @@ lwc1 %f3,1(%r0)
 sub.s %f4,%f1,%f3
 c.eq.s %r8,%f1,%f4
 add %r9,%r2,%r8
-out &r9
+out %r9
 andi %r10,%r2,$0xffff
 out %r10
 addi %r11,%r0,$0x4000
 sll %r11,%r11,$16
 sw %r11,2(%r0)
 lwc1 %f5,2(%r0)
-div.s %f6,&f1,%f5
+div.s %f6,%f1,%f5
 c.eq.s %r12,%f2,%f6
 add %r13,%r12,%r2
 out %r13

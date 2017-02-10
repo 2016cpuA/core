@@ -167,6 +167,7 @@ module fpu (
 					4'b1010 : i <= 3'b110;
 					default : i <= 3'b111;
 				endcase
+				fpu_result <= 0;
 			end else if (state == 1 && ready_a[i]) begin
 				state <= state + 1;
 				valid_a <= 1;
@@ -183,9 +184,9 @@ module fpu (
 					3'b001 : fpu_result <= result_1;
 					3'b010 : fpu_result <= result_2;
 					3'b011 : fpu_result <= result_3;
-					3'b100 : fpu_result <= {24'h000000, result_4};
-					3'b101 : fpu_result <= {24'h000000, result_5};
-					3'b110 : fpu_result <= {24'h000000, result_6};
+					3'b100 : fpu_result <= {24'b000000000000000000000000, result_4};
+					3'b101 : fpu_result <= {24'b000000000000000000000000, result_5};
+					3'b110 : fpu_result <= {24'b000000000000000000000000, result_6};
 					default : fpu_result <= result_0;
 				endcase
 				fpu_valid <= valid_r[i];
