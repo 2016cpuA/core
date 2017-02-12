@@ -3,7 +3,7 @@ module fpu (
 //各logic coreへの入力valid、出力readyを独立にするためにvalid_a,valid_b,ready_rを長さ7にした。
 	input logic CLK,
 	input logic reset,
-	input logic distinct,
+	input logic distinct_,
 	input logic AorF,
 	input logic [3:0] ALUOp,
 	input logic [31:0] op1,
@@ -12,6 +12,7 @@ module fpu (
 	output logic [31:0] fpu_result,
 	output logic fpu_valid
 );
+	logic distinct;
 	logic [1:0] state;
 	logic [31:0] op1_;
 	logic [31:0] op2_;
@@ -130,8 +131,15 @@ module fpu (
 		.m_axis_result_tvalid(valid_r[6])
 	);
 
+	make_pulse make_pulse(
+		.CLK(CLK),
+		.reset(reset),
+		.x(distinct_),
+		.y(distinct)
+	);
 
 	always_comb begin
+		if (AorF) begin
 		case (ALUOp)
 			4'b0011 : AorF_ <= 1;
 			4'b0100 : AorF_ <= 1;
@@ -142,6 +150,7 @@ module fpu (
 			4'b1010 : AorF_ <= 0;
 			default : AorF_ <= 1;
 		endcase
+		end
 	end
 
 	always_ff @(posedge CLK) begin

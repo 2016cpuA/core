@@ -245,6 +245,7 @@ module execution #(
 			result <= alu_result;
 			valid <= 1;
 			state <= 0;
+			distinct__ <= 0;
 		end else begin
 			distinct_next <= 0;
 		end

@@ -14,3 +14,5 @@ srl		%r13,%r1,1		#reg[13] <= 0
 srl		%r14,%r4,31		#reg[14] <= 1
 sra		%r15,%r1,1		#reg[15] <= 0
 sra		%r16,%r4,31		#reg[16] <= -1
+out %r15
+out %r16

@@ -28,4 +28,15 @@ div.s %f6,%f1,%f5
 c.eq.s %r12,%f2,%f6
 add %r13,%r12,%r2
 out %r13
+addi %r14,%r0,$0x8000
+sll %r14,%r14,$16
+sw %r14,3(%r0)
+lwc1 %f7,3(%r0)
+c.eq.s %r15,%f7,%f8
+add %r16,%r15,%r4
+out %r16
+c.lt.s %r17,%f7,%f8
+c.lt.s %r18,%f8,%f7
+c.lt.s %r19,%f6,%f7
+c.lt.s %r20,%f7,%f6
 halt

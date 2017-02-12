@@ -8,8 +8,9 @@ module op2_sel(
 	always_comb begin
 		case (ALUSrcs)
 			2'b00 : op2 <= op2_sub;
-			2'b01 : op2 <= sa;
+			2'b01 : op2 <= {27'b000000000000000000000000000, sa};
 			2'b10 : op2 <= {{16{immediate[15]}}, immediate};
+			2'b11 : op2 <= {16'h0000, immediate};
 			default : op2 <= 0;
 		endcase
 	end
