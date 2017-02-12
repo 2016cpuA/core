@@ -25,7 +25,7 @@ module test_minrt #(
 			led
 	);
 	localparam WAIT = 271.3;
-	localparam LONG_WAIT = 100000;
+//	localparam LONG_WAIT = 100000;
 	localparam CLK_ = 1;
 	always begin
 		CLK <= 1;
@@ -37,7 +37,7 @@ module test_minrt #(
 	integer i, fp, status;
 	logic [7:0] buffer;
 	initial begin
-		fp = $fopen("/home/tansei/Documents/3a/cpuEX/cpuEX/srcs/s_and_coe/contest.bin", "rb");
+		fp = $fopen("/home/tansei/Documents/3a/cpuEX/cpuEX/srcs/s_and_coe/contest.txt", "r");
 		#1;
 		UART_RX <= 1;
 		sw_n_10 <= 0;
@@ -47,11 +47,10 @@ module test_minrt #(
 		#WAIT;
 		sw_c_7 <= 0;
 		#WAIT;
-		#LONG_WAIT;
 		if (fp != 0) begin
 			while (!$feof(fp)) begin
 				#1;
-				status = $fscanf(fp, "%8b", buffer);
+				status = $fscanf(fp, "%8b\n", buffer);
  				#WAIT;
 				UART_RX <= 0;
  				#WAIT;

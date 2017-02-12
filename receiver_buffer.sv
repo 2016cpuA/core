@@ -41,25 +41,25 @@ module receiver_buffer(
 		case (state)
 			0 : begin
 					if (valid) begin
-						buffer_buf[7:0] <= data;
+						buffer_buf[31:24] <= data;
 						state <= state + 1;
 				    end
 				end
 			1 : begin
 					if (valid) begin
-						buffer_buf[15:8] <= data;
+						buffer_buf[23:16] <= data;
 						state <= state + 1;
 					end
 				end
 			2 : begin
 					if (valid) begin
-						buffer_buf[23:16] <= data;
+						buffer_buf[15:8] <= data;
 						state <= state + 1;
 					end
 				end
 			3 : begin
 					if (valid) begin
-						buffer_buf[31:24] <= data;
+						buffer_buf[7:0] <= data;
 						state <= state + 1;
 					end
 				end
