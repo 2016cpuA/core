@@ -44,13 +44,13 @@ iloop:
 	mul.s	%f2, %f0, %f0
 	mul.s	%f3, %f1, %f1
 	add.s	%f6, %f2, %f3
-	c.le.s	%r11,%f6, %f27, iloop_next #correct fble
-	
-	movi	%r0, 0
+	c.le.s	%r11,%f6, %f27 #correct fble
+	beq		%r26,%r11,iloop_next
+	la	%r0, 0
 	out	%r0
 	jr
 iloop_print1:
-	movi	%r0, 1
+	la	%r0, 1
 	out	%r0
 return:
 	jr
@@ -58,7 +58,7 @@ iloop_next:
 	addi	%r0, %r0, -1
 	j	iloop
 xloop:
-	movi	%r2, 400
+	la	%r2, 400
 	ble	%r2, %r0, return
 	itof	%f0, %r0
 	itof	%f1, %r1
