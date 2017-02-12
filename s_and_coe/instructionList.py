@@ -44,13 +44,13 @@ def make_opcode(one, second, lastb, last):
     elif second=="c" or second=="d" or second=="e" or second=="f":
         ans += "11"
 
-    if lastb=="0" or lastb=="1" or lastb=="2" or lastb=="3":
+    if lastb=="0" or lastb=="4" or lastb=="8" or lastb=="c":
         ans2 = "00"
-    elif lastb=="4" or lastb=="5" or lastb=="6" or lastb=="7":
+    elif lastb=="1" or lastb=="5" or lastb=="9" or lastb=="d":
         ans2 = "01"
-    elif lastb=="8" or lastb=="9" or lastb=="a" or lastb=="b":
+    elif lastb=="2" or lastb=="6" or lastb=="a" or lastb=="e":
         ans2 = "10"
-    elif lastb=="c" or lastb=="d" or lastb=="e" or lastb=="f":
+    elif lastb=="3" or lastb=="7" or lastb=="b" or lastb=="f":
         ans2 = "11"
 
     if last=="0":
@@ -148,6 +148,10 @@ def make_opcode(one, second, lastb, last):
             return "XOR"
         elif ans2=="101010":
             return "SLT"
+        else:
+            return ans2
+    else:
+        return "nazodayo"
 
 
 path = str(argv[1])

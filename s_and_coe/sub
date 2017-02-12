@@ -1,8 +1,7 @@
-ADD
+ADD			ok
 ADD.S
-ADDI
-AND
-ANDI
+ADDI		ok
+ANDI		ok
 BEQ
 BNE
 C.eq.S
@@ -15,14 +14,10 @@ JR
 LW
 LWC1
 MUL.S
-OR
-ORI
+ORI			ok
 OUT
-SLL
-SLT
-SRA
-SRL
-SUB
+SLL			ok
+SRL			ok
 SUB.S
 SW
 SWC1
