@@ -156,7 +156,7 @@ def make_opcode(one, second, lastb, last):
 
 path = str(argv[1])
 path2 = str(argv[2])
-instructions = set()
+instructions = []
 with open(path, 'r') as f:
     for index, line in enumerate(f):
         if index >= 2:
@@ -166,9 +166,9 @@ with open(path, 'r') as f:
             last = line[7]
             data = make_opcode(one, second, lastb, last)
             if data is not None:
-                instructions.add(data)
+                instructions.append(data)
 instructions2 = list(instructions)
-instructions2.sort()
+#instructions2.sort()
 with open(path2, 'w') as g:
     for data in instructions2:
         g.write(data + "\n")
