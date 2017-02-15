@@ -22,7 +22,8 @@
 module d_l_sub(
     input logic CLK,
     input logic UART_RX,
-    output logic UART_TX
+    output logic UART_TX,
+    output logic led
     );
         //receiver and sender
     logic [7:0] receiver_data;
@@ -46,6 +47,8 @@ module d_l_sub(
             sender_ready
     );
  	   
+ 	assign led = receiver_data;
+ 	
     always_ff @(posedge CLK) begin
         if (state == 0 && receiver_valid) begin
 			state <= 1;

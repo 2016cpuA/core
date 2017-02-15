@@ -2,7 +2,8 @@ module d_l(
     input logic CLK_P,
     input logic CLK_N,
 	input logic UART_RX,
-    output logic UART_TX
+    output logic UART_TX,
+    output logic [7:0] led
 );
 	logic CLK_in;
     logic CLK;
@@ -19,7 +20,8 @@ module d_l(
     d_l_sub d_l_sub(
         CLK,
         UART_RX,
-        UART_TX
+        UART_TX,
+        led
     );
 endmodule
 

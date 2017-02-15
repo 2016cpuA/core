@@ -1,6 +1,6 @@
 module sender #(
-	parameter COUNT_WIDTH = 9,//5,//12,
-	parameter COUNT_MAX = 9'd268//5'd26//12'd2603  // 300000000/115200 = 2604.1666666666665
+	parameter COUNT_WIDTH = 12,//11,//5,//12,
+	parameter COUNT_MAX = 12'd2602//125*10^6/115200=11'd1076//5'd26//12'd2603  // 300000000/115200 = 2604.1666666666665
 ) (
 	input logic CLK,
 	input logic[7:0] in,
