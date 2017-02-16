@@ -1,5 +1,5 @@
 module top_sub #(  // todo : reset system
-	parameter INST_MEM_WIDTH = 14
+	parameter INST_MEM_WIDTH = 15
 ) (
 	input logic CLK,
 	input logic UART_RX,

@@ -1,5 +1,5 @@
 module inst_fetch #(
-	parameter INST_MEM_WIDTH = 14
+	parameter INST_MEM_WIDTH = 15
 ) (
 	input logic CLK, 
 	input logic reset,
