@@ -1,4 +1,5 @@
 module execution #(
+	//Only when "result" signal is determined, a "valid" signal is raised
 	parameter INST_MEM_WIDTH = 5
 ) (
 	input logic CLK,
@@ -95,12 +96,12 @@ module execution #(
 			rd_, 
 			rt_, 
 			sa_,
-			rdist_
+			rdist
 	);
 	pc_adder #(INST_MEM_WIDTH) pc_adder2_instance(
 			pc_, 
 			immediate_[INST_MEM_WIDTH-1:0], 
-			pc2_
+			pc2
 	);
 	alu alu_instance(
 			ALUOp_, 
@@ -122,6 +123,15 @@ module execution #(
 	);
 //    assign fpu_result = 0;
 //   assign fpu_valid = 0;
+
+	always_comb begin
+		if (!AorF_) begin
+			result <= alu_result;
+		end else begin
+			result <= fpu_result;
+		end
+	end
+
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 		distinct_next <= 0;
@@ -153,18 +163,18 @@ module execution #(
 		valid <= 0;
 		end else begin
 		if ((! AorF || MemWrite || MemRead) && (state ==  0) && distinct) begin
-			distinct__ <= distinct;
-			AorF__ <= AorF;
-			RegWrite__ <= RegWrite;
-			MemtoReg__ <= MemtoReg;
-			Branch__ <= Branch;
-			MemWrite__ <= MemWrite;
-			MemRead__ <= MemRead;
-			UARTtoReg__ <= UARTtoReg;
-			op2_sub__ <= op2_sub;
-			inst_index__ <= inst_index;
-			pc__ <= pc;
-			pc1__ <= pc1;
+			distinct_next <= distinct;
+			AorF_next <= AorF;
+			RegWrite_next <= RegWrite;
+			MemtoReg_next <= MemtoReg;
+			Branch_next <= Branch;
+			MemWrite_next <= MemWrite;
+			MemRead_next <= MemRead;
+			UARTtoReg_next <= UARTtoReg;
+			register_data <= op2_sub;
+			inst_index_next <= inst_index;
+			pc_next <= pc;
+			pc1_next <= pc1;
 	
 			ALUSrcs_ <= ALUSrcs;
 			ALUSrcs2_ <= ALUSrcs2;
@@ -178,8 +188,8 @@ module execution #(
 			immediate_ <= immediate;
 			pc_ <= pc;
 
-			valid <= 0;
-			state <= 2;
+			AorF_ <= AorF;
+			valid <= 1;
 		end else if ((state == 0) && distinct) begin
 			AorF_  <= AorF;
 			ALUSrcs_ <= ALUSrcs;
@@ -220,34 +230,13 @@ module execution #(
 			inst_index_next <= inst_index__;
 			pc_next <= pc__;
 			pc1_next <= pc1__;
-			result <= fpu_result;
-			rdist <= rdist_;
-			pc2 <= pc2_;
 			valid <= 1;
 			state <= 0;
 			AorF_ <= 0;
 			distinct__ <= 0;
-		end else if (state == 2) begin
-			distinct_next <= distinct__;
-			AorF_next <= AorF__;
-			RegWrite_next <= RegWrite__;
-			MemtoReg_next <= MemtoReg__;
-			Branch_next <= Branch__;
-			MemWrite_next <= MemWrite__;
-			MemRead_next <= MemRead__;
-			UARTtoReg_next <= UARTtoReg__;
-			register_data <= op2_sub__;
-			inst_index_next <= inst_index__;
-			pc_next <= pc__;
-			pc1_next <= pc1__;
-			pc2 <= pc2_;
-			rdist <= rdist_;
-			result <= alu_result;
-			valid <= 1;
-			state <= 0;
-			distinct__ <= 0;
 		end else begin
 			distinct_next <= 0;
+			valid <= 0
 		end
 		end
 	end
