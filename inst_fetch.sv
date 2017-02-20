@@ -26,7 +26,7 @@ module inst_fetch #(
 	inst_memory #(INST_MEM_WIDTH) inst_memory_instance(
 	       CLK, 
 	       reset, 
-	       pc_, 
+	       pc, 
 	       inst_, 
 		   distinct_
 	);
@@ -50,15 +50,16 @@ module inst_fetch #(
 				state <= state + 1;
 				distinct <= 0;
 			end else if (state == 1) begin
-				state <= state + 1;
-			end else if (state == 2) begin
-				state <= state + 1;
+				state <= 3;
+//				state <= state + 1;
+//			end else if (state == 2) begin
+//				state <= state + 1;
 			end else if (state == 3 && (!full)) begin
 				inst <= inst_;
 				distinct <= distinct_;
 				pc_next <= pc_;
 				pc1_next <= pc1_;
-				state <= 0;
+				state <= 5;
 			end else if (state == 3 && full) begin
 				inst__ <= inst_;
 				distinct__ <= distinct_;
@@ -68,6 +69,9 @@ module inst_fetch #(
 				distinct <= distinct__;
 				pc_next <= pc_;
 				pc1_next <= pc1_;
+				state <= 0;
+			end else if (state == 5) begin
+				distinct <= distinct_;
 				state <= 0;
 			end else begin
 				distinct <= 0;

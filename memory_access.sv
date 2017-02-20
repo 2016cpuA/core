@@ -5,6 +5,7 @@ module memory_access #(
 	input logic reset,
 	input logic distinct,
 	input logic AorF,
+	input logic AorF_result,
  	input logic RegWrite,
 	input logic [1:0] MemtoReg,
 	input logic [1:0] Branch,
@@ -13,6 +14,7 @@ module memory_access #(
 	input logic UARTtoReg,
 	input logic [31:0] register_data,
 	input logic [31:0] alu_result,
+	input logic [31:0] fpu_result,
 	input logic valid,
 	input logic [4:0] rdist,
 	input logic [25:0] inst_index,
@@ -49,17 +51,25 @@ module memory_access #(
 	logic [INST_MEM_WIDTH-1:0] pc1_;
 	logic [INST_MEM_WIDTH-1:0] pc2_;
 	logic [31:0] read_data_;
+	logic [31:0] result;
 
 	data_memory data_memory_instance(
 		CLK, 
 		reset, 
 		distinct, 
-		alu_result, 
+		result, 
 		register_data, 
 		MemWrite, 
 		read_data_, 
 		MemRead
 	);
+
+	always_comb begin
+		if (AorF_result) 
+			result <= fpu_result;
+		else	
+			result <= alu_result;
+	end
 
 	always_ff @(posedge CLK) begin
 		if (reset) begin
@@ -99,7 +109,7 @@ module memory_access #(
 				Branch_next <= Branch;
 				UARTtoReg_next <= UARTtoReg;
 				register_data_next <= register_data;
-				alu_result_next <= alu_result;
+				alu_result_next <= result;
 				rdist_next <= rdist;
 				inst_index_next <= inst_index;
 				pc_next <= pc;
@@ -114,7 +124,7 @@ module memory_access #(
 				Branch_ <= Branch;
 				UARTtoReg_ <= UARTtoReg;
 				register_data_ <= register_data;
-				alu_result_ <= alu_result;
+				alu_result_ <= result;
 				rdist_ <= rdist;
 				inst_index_ <= inst_index;
 				pc_ <= pc;

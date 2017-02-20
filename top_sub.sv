@@ -144,6 +144,7 @@ module top_sub #(  // todo : reset system
 	logic [INST_MEM_WIDTH-1:0] pc1_to_ex;
 	logic distinct_next_from_ex;
 	logic AorF_next_from_ex;
+	logic AorF_result_from_ex;
  	logic RegWrite_next_from_ex;
 	logic [1:0] MemtoReg_next_from_ex;
 	logic [1:0] Branch_next_from_ex;
@@ -152,6 +153,7 @@ module top_sub #(  // todo : reset system
 	logic UARTtoReg_next_from_ex;
 	logic [31:0] register_data_from_ex;
 	logic [31:0] alu_result_from_ex;
+	logic [31:0] fpu_result_from_ex;
 	logic valid_from_ex;
 	logic [4:0] rdist_from_ex;
 	logic [25:0] inst_index_next_from_ex;
@@ -170,6 +172,7 @@ module top_sub #(  // todo : reset system
 	logic UARTtoReg_to_mem;
 	logic [31:0] register_data_to_mem;
 	logic [31:0] alu_result_to_mem;
+	logic [31:0] fpu_result_to_mem;
 	logic valid_to_mem;
 	logic [4:0] rdist_to_mem;
 	logic [25:0] inst_index_to_mem;
@@ -385,6 +388,7 @@ module top_sub #(  // todo : reset system
 			pc1_to_ex, 
 			distinct_next_from_ex,
 			AorF_next_from_ex,
+			AorF_result_from_ex,
 			RegWrite_next_from_ex, 
 			MemtoReg_next_from_ex, 
 			Branch_next_from_ex, 
@@ -393,6 +397,7 @@ module top_sub #(  // todo : reset system
 			UARTtoReg_next_from_ex, 
 			register_data_from_ex, 
 			alu_result_from_ex, 
+			fpu_result_from_ex,
 			valid_from_ex,
 			rdist_from_ex, 
 			inst_index_next_from_ex, 
@@ -402,11 +407,12 @@ module top_sub #(  // todo : reset system
 	);
 
 	//memory access
-	memory_access #(INST_MEM_WIDTH) memory_access_instance(
+	memory_access2 #(INST_MEM_WIDTH) memory_access_instance(
 			CLK, 
 			reset, 
 			distinct_to_mem,
 			AorF_to_mem,
+			AorF_result_from_ex,
 			RegWrite_to_mem, 
 			MemtoReg_to_mem, 
 			Branch_to_mem, 
@@ -415,6 +421,7 @@ module top_sub #(  // todo : reset system
 			UARTtoReg_to_mem, 
 			register_data_to_mem, 
 			alu_result_to_mem,
+			fpu_result_to_mem,
 			valid_to_mem, 
 			rdist_to_mem, 
 			inst_index_to_mem, 
@@ -532,6 +539,7 @@ module top_sub #(  // todo : reset system
 	assign UARTtoReg_to_mem 		= UARTtoReg_next_from_ex;
 	assign register_data_to_mem 	= register_data_from_ex;
 	assign alu_result_to_mem 		= alu_result_from_ex;
+	assign fpu_result_to_mem		= fpu_result_from_ex;
 	assign valid_to_mem 			= valid_from_ex;
 	assign rdist_to_mem 			= rdist_from_ex;
 	assign inst_index_to_mem 		= inst_index_next_from_ex;

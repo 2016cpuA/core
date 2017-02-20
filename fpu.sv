@@ -150,6 +150,8 @@ module fpu (
 			4'b1010 : AorF_ <= 0;
 			default : AorF_ <= 1;
 		endcase
+		end else begin
+			AorF_ <= 0;
 		end
 	end
 

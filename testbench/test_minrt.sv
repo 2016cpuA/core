@@ -1,5 +1,5 @@
 module test_minrt #(
-	parameter INST_MEM_WIDTH = 14
+	parameter INST_MEM_WIDTH = 15
 );
     logic CLK;
 	logic UART_RX;
@@ -24,7 +24,7 @@ module test_minrt #(
 			UART_TX,
 			led
 	);
-	localparam WAIT = 271.3;
+	localparam WAIT = 1992;
 //	localparam LONG_WAIT = 100000;
 	localparam CLK_ = 1;
 	always begin

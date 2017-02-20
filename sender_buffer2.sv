@@ -8,7 +8,7 @@ module sender_buffer2 (
 	output logic full,
 	output logic valid
 );
-	localparam num = 9;
+	localparam num = 5;
 
 	logic [32:0] buffer [2**num-1:0];
 	logic [num-1:0] tail;
