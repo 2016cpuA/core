@@ -1,5 +1,4 @@
 module execution #(
-	//Only when "result" signal is determined, a "valid" signal is raised
 	parameter INST_MEM_WIDTH = 5
 ) (
 	input logic CLK,
@@ -28,7 +27,6 @@ module execution #(
 	input logic [INST_MEM_WIDTH-1:0] pc1,
 	output logic distinct_next,
 	output logic AorF_next,
-	output logic AorF_result,
  	output logic RegWrite_next,
 	output logic [1:0] MemtoReg_next,
 	output logic [1:0] Branch_next,
@@ -36,8 +34,7 @@ module execution #(
 	output logic MemRead_next,
 	output logic UARTtoReg_next,
 	output logic [31:0] register_data,
-	output logic [31:0] alu_result,
-	output logic [31:0] fpu_result,
+	output logic [31:0] result,
 	output logic valid,
 	output logic [4:0] rdist,
 	output logic [25:0] inst_index_next,
@@ -61,6 +58,8 @@ module execution #(
 	logic [15:0] immediate_;
 	logic [INST_MEM_WIDTH-1:0] pc_;
 	logic [INST_MEM_WIDTH-1:0] pc2_;
+	logic [31:0] alu_result;
+	logic [31:0] fpu_result;
 	logic fpu_valid;
 	logic [1:0] state;
 	logic distinct__;
@@ -96,12 +95,12 @@ module execution #(
 			rd_, 
 			rt_, 
 			sa_,
-			rdist
+			rdist_
 	);
 	pc_adder #(INST_MEM_WIDTH) pc_adder2_instance(
 			pc_, 
 			immediate_[INST_MEM_WIDTH-1:0], 
-			pc2
+			pc2_
 	);
 	alu alu_instance(
 			ALUOp_, 
@@ -123,7 +122,6 @@ module execution #(
 	);
 //    assign fpu_result = 0;
 //   assign fpu_valid = 0;
-
 	always_ff @(posedge CLK) begin
 		if (reset) begin
 		distinct_next <= 0;
@@ -151,21 +149,22 @@ module execution #(
 		immediate_ <= 0;
 		pc_ <= 0;
 		state <= 0;
+		result <= 0;
 		valid <= 0;
 		end else begin
 		if ((! AorF || MemWrite || MemRead) && (state ==  0) && distinct) begin
-			distinct_next <= distinct;
-			AorF_next <= AorF;
-			RegWrite_next <= RegWrite;
-			MemtoReg_next <= MemtoReg;
-			Branch_next <= Branch;
-			MemWrite_next <= MemWrite;
-			MemRead_next <= MemRead;
-			UARTtoReg_next <= UARTtoReg;
-			register_data <= op2_sub;
-			inst_index_next <= inst_index;
-			pc_next <= pc;
-			pc1_next <= pc1;
+			distinct__ <= distinct;
+			AorF__ <= AorF;
+			RegWrite__ <= RegWrite;
+			MemtoReg__ <= MemtoReg;
+			Branch__ <= Branch;
+			MemWrite__ <= MemWrite;
+			MemRead__ <= MemRead;
+			UARTtoReg__ <= UARTtoReg;
+			op2_sub__ <= op2_sub;
+			inst_index__ <= inst_index;
+			pc__ <= pc;
+			pc1__ <= pc1;
 	
 			ALUSrcs_ <= ALUSrcs;
 			ALUSrcs2_ <= ALUSrcs2;
@@ -179,9 +178,8 @@ module execution #(
 			immediate_ <= immediate;
 			pc_ <= pc;
 
-			AorF_ <= 0;
-			AorF_result <= AorF;
-			valid <= 1;
+			valid <= 0;
+			state <= 2;
 		end else if ((state == 0) && distinct) begin
 			AorF_  <= AorF;
 			ALUSrcs_ <= ALUSrcs;
@@ -212,7 +210,6 @@ module execution #(
 		end else if (state == 1 && fpu_valid) begin
 			distinct_next <= distinct__;
 			AorF_next <= AorF___;
-			AorF_result <= AorF__;
 			RegWrite_next <= RegWrite__;
 			MemtoReg_next <= MemtoReg__;
 			Branch_next <= Branch__;
@@ -223,12 +220,34 @@ module execution #(
 			inst_index_next <= inst_index__;
 			pc_next <= pc__;
 			pc1_next <= pc1__;
+			result <= fpu_result;
+			rdist <= rdist_;
+			pc2 <= pc2_;
+			valid <= 1;
+			state <= 0;
+			AorF_ <= 0;
+			distinct__ <= 0;
+		end else if (state == 2) begin
+			distinct_next <= distinct__;
+			AorF_next <= AorF__;
+			RegWrite_next <= RegWrite__;
+			MemtoReg_next <= MemtoReg__;
+			Branch_next <= Branch__;
+			MemWrite_next <= MemWrite__;
+			MemRead_next <= MemRead__;
+			UARTtoReg_next <= UARTtoReg__;
+			register_data <= op2_sub__;
+			inst_index_next <= inst_index__;
+			pc_next <= pc__;
+			pc1_next <= pc1__;
+			pc2 <= pc2_;
+			rdist <= rdist_;
+			result <= alu_result;
 			valid <= 1;
 			state <= 0;
 			distinct__ <= 0;
 		end else begin
 			distinct_next <= 0;
-			valid <= 0;
 		end
 		end
 	end
